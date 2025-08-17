@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Çıxış - Alisa Club{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Çıxış</h2>
+                    <p class="text-center">Hesabınızdan çıxmaq istədiyinizə əminsiniz?</p>
+                    <form method="post" action="{% url 'membership:logout' %}">
+                        {% csrf_token %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-danger">Çıxış Et</button>
+                            <a href="{% url 'membership:profile' %}" class="btn btn-secondary">Geri</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

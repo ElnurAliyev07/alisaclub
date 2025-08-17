@@ -1,0 +1,784 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Üzvlük - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+        --gradient-primary: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+        --medium-gray: #6c757d;
+        --dark-navy: #2c3e50;
+        --success-green: #28a745;
+        --warning-orange: #fd7e14;
+        --info-blue: #17a2b8;
+        --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        --shadow-hover: 0 25px 50px rgba(0,0,0,0.15);
+        --border-radius: 20px;
+    }
+
+    /* Hero Section */
+    .hero-membership {
+        background: var(--gradient-hero);
+        color: white;
+        padding: 120px 0 80px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-membership::before {
+        content: '👑 ✨ 🎪 🎨 🎯 🏆 🌟 ⭐';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 2rem;
+        opacity: 0.1;
+        animation: floatingIcons 25s linear infinite;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }
+
+    @keyframes floatingIcons {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .hero-title {
+        font-family: 'Fredoka', cursive;
+        font-size: 4rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-subtitle {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.4rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Benefits Section */
+    .benefits-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+
+    .benefit-card {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        padding: 2.5rem;
+        text-align: center;
+        transition: all 0.4s ease;
+        box-shadow: var(--shadow);
+        height: 100%;
+        border: 3px solid transparent;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .benefit-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: var(--gradient-primary);
+        opacity: 0;
+        transition: all 0.4s ease;
+        z-index: 1;
+    }
+
+    .benefit-card:hover::before {
+        opacity: 0.05;
+    }
+
+    .benefit-card:hover {
+        transform: translateY(-15px);
+        box-shadow: var(--shadow-hover);
+        border-color: #ff6b9d;
+    }
+
+    .benefit-icon {
+        width: 100px;
+        height: 100px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 2rem;
+        font-size: 2.5rem;
+        color: white;
+        position: relative;
+        z-index: 2;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .benefit-title {
+        font-family: 'Fredoka', cursive;
+        font-size: 1.8rem;
+        color: var(--dark-navy);
+        margin-bottom: 1rem;
+        font-weight: 600;
+        position: relative;
+        z-index: 2;
+    }
+
+    .benefit-description {
+        font-family: 'Nunito', sans-serif;
+        color: var(--medium-gray);
+        font-size: 1.1rem;
+        line-height: 1.7;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Pricing Section */
+    .pricing-section {
+        padding: 100px 0;
+        background: var(--light-gray);
+        position: relative;
+    }
+
+    .pricing-card {
+        background: var(--white);
+        border-radius: 30px;
+        padding: 3rem 2rem;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: all 0.4s ease;
+        height: 100%;
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .pricing-card.featured {
+        transform: scale(1.05);
+        border-color: #ff6b9d;
+        box-shadow: 0 25px 60px rgba(255, 107, 157, 0.3);
+    }
+
+    .pricing-card.featured::before {
+        content: 'Ən Məşhur';
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--gradient-primary);
+        color: white;
+        padding: 8px 25px;
+        border-radius: 20px;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .pricing-card.featured:hover {
+        transform: scale(1.05) translateY(-10px);
+    }
+
+    .pricing-plan-name {
+        font-family: 'Fredoka', cursive;
+        font-size: 2rem;
+        color: var(--dark-navy);
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .pricing-amount {
+        font-family: 'Fredoka', cursive;
+        font-size: 3.5rem;
+        font-weight: 700;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+    }
+
+    .pricing-period {
+        font-family: 'Nunito', sans-serif;
+        color: var(--medium-gray);
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .pricing-features {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 3rem;
+    }
+
+    .pricing-features li {
+        font-family: 'Nunito', sans-serif;
+        color: var(--dark-navy);
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 30px;
+        font-size: 1.1rem;
+    }
+
+    .pricing-features li:last-child {
+        border-bottom: none;
+    }
+
+    .pricing-features li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--success-green);
+        font-weight: bold;
+        font-size: 1.3rem;
+    }
+
+    .pricing-btn {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 18px 40px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border-radius: 50px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        width: 100%;
+    }
+
+    .pricing-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+        color: white;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+
+    .faq-item {
+        background: var(--light-gray);
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .faq-item:hover {
+        border-color: #ff6b9d;
+        transform: translateX(5px);
+    }
+
+    .faq-question {
+        background: var(--white);
+        border: none;
+        padding: 1.5rem 2rem;
+        width: 100%;
+        text-align: left;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--dark-navy);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+    }
+
+    .faq-question::after {
+        content: '+';
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        font-weight: 300;
+        color: #ff6b9d;
+        transition: all 0.3s ease;
+    }
+
+    .faq-question.active::after {
+        content: '−';
+        transform: translateY(-50%) rotate(180deg);
+    }
+
+    .faq-question:hover {
+        background: #f0f0f0;
+    }
+
+    .faq-answer {
+        padding: 0 2rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        background: var(--light-gray);
+    }
+
+    .faq-answer.active {
+        padding: 1.5rem 2rem;
+        max-height: 200px;
+    }
+
+    .faq-answer p {
+        font-family: 'Nunito', sans-serif;
+        color: var(--medium-gray);
+        line-height: 1.7;
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    /* Section Titles */
+    .section-title {
+        font-family: 'Fredoka', cursive;
+        font-size: 3.2rem;
+        color: var(--dark-navy);
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        font-weight: 700;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 6px;
+        background: var(--gradient-primary);
+        border-radius: 10px;
+    }
+
+    /* CTA Section */
+    .cta-section {
+        background: var(--gradient-primary);
+        color: white;
+        padding: 80px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cta-section::before {
+        content: '🎉 🎊 ✨ 🌟 👑 🏆 🎯 🎪';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 2.5rem;
+        opacity: 0.1;
+        animation: ctaFloat 20s linear infinite;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+    }
+
+    @keyframes ctaFloat {
+        0% { transform: translateX(-100%) rotate(0deg); }
+        100% { transform: translateX(100%) rotate(360deg); }
+    }
+
+    .cta-title {
+        font-family: 'Fredoka', cursive;
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cta-description {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.3rem;
+        margin-bottom: 2.5rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cta-btn {
+        background: white;
+        color: #ff6b9d;
+        border: none;
+        padding: 20px 50px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        display: inline-flex;
+        align-items: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        color: #ff6b9d;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.8rem;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1);
+            margin-bottom: 2rem;
+        }
+        
+        .benefit-card {
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-amount {
+            font-size: 2.8rem;
+        }
+        
+        .cta-title {
+            font-size: 2.2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title {
+            font-size: 2.2rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .benefit-icon {
+            width: 80px;
+            height: 80px;
+            font-size: 2rem;
+        }
+        
+        .pricing-amount {
+            font-size: 2.2rem;
+        }
+        
+        .faq-question {
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .faq-answer.active {
+            padding: 1rem 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-membership">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h1 class="hero-title">Alisa Club Ailəsinə Qoşulun! 👑</h1>
+                <p class="hero-subtitle">Uşağınızın inkişafında bizimle birlikdə olun. Eksklüziv tədbirlər, təhsil materialları və daha çoxu sizi gözləyir!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section">
+    <div class="container">
+        <h2 class="section-title">Üzvlük Faydaları</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-calendar-star"></i>
+                    </div>
+                    <h3 class="benefit-title">Özəl Tədbirlər</h3>
+                    <p class="benefit-description">Yalnız üzvlər üçün təşkil olunan eksklüziv tədbirlərdə iştirak edin. Kiçik qruplarla daha keyfiyyətli təhsil.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3 class="benefit-title">Pulsuz Materiallar</h3>
+                    <p class="benefit-description">Yaş qrupuna uyğun rəngləmə səhifələri, tapşırıqlar və oyun ideyaları əldə edin. Hər ay yeni məzmun!</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="benefit-title">Medal Sistemi</h3>
+                    <p class="benefit-description">Uşağınızın nailiyyətlərini virtual medallarla qeyd edin. Hər mərhələ üçün xüsusi mükafatlar.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3 class="benefit-title">Doğum Günü Endirimi</h3>
+                    <p class="benefit-description">Doğum günü tədbirlərində 30% endirimlə xatirələndirici günlər yaradın. Planlaşdırma xidməti pulsuz!</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <h3 class="benefit-title">Ailə Şəbəkəsi</h3>
+                    <p class="benefit-description">Digər validəynlərlə əlaqə qurun, təcrübə paylaşın və uşaqlarınız üçün dostluqlar yaradın.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3 class="benefit-title">Prioritet Dəstək</h3>
+                    <p class="benefit-description">Suallarınız və problemləriniz üçün prioritet müştəri xidməti. 24 saat ərzində cavab zəmanəti.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing-section">
+    <div class="container">
+        <h2 class="section-title">Abunəlik Planları</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card">
+                    <h3 class="pricing-plan-name">Başlanğıc</h3>
+                    <div class="pricing-amount">15₼</div>
+                    <p class="pricing-period">Aylıq</p>
+                    <ul class="pricing-features">
+                        <li>Aylıq 2 tədbir</li>
+                        <li>Əsas təhsil materialları</li>
+                        <li>Medal sistemi giriş</li>
+                        <li>Email dəstək</li>
+                    </ul>
+                    <a href="{% url 'membership:register' %}?plan=basic" class="pricing-btn">Seç</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card featured">
+                    <h3 class="pricing-plan-name">Premium</h3>
+                    <div class="pricing-amount">25₼</div>
+                    <p class="pricing-period">Aylıq</p>
+                    <ul class="pricing-features">
+                        <li>Limitsiz tədbir iştirakı</li>
+                        <li>Bütün təhsil materialları</li>
+                        <li>Doğum günü 30% endirim</li>
+                        <li>Prioritet müştəri dəstəyi</li>
+                        <li>Özəl məshurlar</li>
+                    </ul>
+                    <a href="{% url 'membership:register' %}?plan=premium" class="pricing-btn">Seç</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="pricing-card">
+                    <h3 class="pricing-plan-name">Ailə</h3>
+                    <div class="pricing-amount">40₼</div>
+                    <p class="pricing-period">Aylıq</p>
+                    <ul class="pricing-features">
+                        <li>3 uşağa qədər</li>
+                        <li>Bütün Premium faydaları</li>
+                        <li>Ailə tədbirləri giriş</li>
+                        <li>Şəxsi məsləhətçi</li>
+                        <li>Ev ziyarəti xidməti</li>
+                    </ul>
+                    <a href="{% url 'membership:register' %}?plan=family" class="pricing-btn">Seç</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <h2 class="section-title">Tez-tez Verilən Suallar</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Üzvlük necə işləyir?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Üzvlük planınızı seçdikdən sonra dərhal bütün faydalardan yararlana bilərsiniz. Aylıq ödəniş sistemi ilə istədiyiniz vaxt üzvlüyünüzü dayandıra bilərsiniz.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Tədbirlərə necə qeydiyyat keçirim?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Üzv oldukdan sonra tədbirlər səhifəsindən istədiyiniz tədbiri seçib qeydiyyat keçə bilərsiniz. Premium üzvlər üçün yerlərin rezervasiyası prioritet əsasında aparılır.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Materialları necə əldə edirəm?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Bütün təhsil materialları üzv panelinizə əlavə olunur. PDF formatında yükləyib çap edə bilərsiniz. Hər ay yeni materiallar əlavə edilir.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Üzvlüyümü ləğv edə bilərəmmi?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Bəli, istədiyiniz vaxt üzvlüyünüzü ləğv edə bilərsiniz. Ödədiyiniz müddət bitənə qədər bütün xidmətlərdən yararlanmağa davam edəcəksiniz.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Ailə planı necə işləyir?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ailə planı ilə 3 uşağa qədər eyni hesabdan idarə edə bilərsiniz. Hər uşaq üçün ayrı-ayrı medal sistemi və fərdiləşdirilmiş məzmun mövcuddur.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        Texniki problem olsa necə əlaqə saxlayım?
+                    </button>
+                    <div class="faq-answer">
+                        <p>Premium üzvlər üçün 24 saat daxilində cavab veririk. Əlaqə formu, email və ya telefon nömrəmiz vasitəsilə bizimlə əlaqə saxlaya bilərsiniz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="cta-title">Hazır başlamağa? 🚀</h2>
+                <p class="cta-description">Uşağınızın inkişafında ilk addımı atın. İndi üzv olun və xüsusi endirimlərdən yararlanın!</p>
+                <a href="{% url 'membership:register' %}" class="cta-btn">
+                    <i class="fas fa-rocket me-2"></i>İndi Başla
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function toggleFaq(element) {
+        const answer = element.nextElementSibling;
+        const allQuestions = document.querySelectorAll('.faq-question');
+        const allAnswers = document.querySelectorAll('.faq-answer');
+        
+        // Close all other FAQs
+        allQuestions.forEach(q => {
+            if (q !== element) {
+                q.classList.remove('active');
+            }
+        });
+        allAnswers.forEach(a => {
+            if (a !== answer) {
+                a.classList.remove('active');
+            }
+        });
+        
+        // Toggle current FAQ
+        element.classList.toggle('active');
+        answer.classList.toggle('active');
+    }
+    
+    // Smooth scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Observe all cards
+        document.querySelectorAll('.benefit-card, .pricing-card, .faq-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+        
+        // Add staggered animation delay
+        document.querySelectorAll('.benefit-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.1}s`;
+        });
+        
+        document.querySelectorAll('.pricing-card').forEach((card, index) => {
+            card.style.transitionDelay = `${index * 0.2}s`;
+        });
+    });
+</script>
+{% endblock %}

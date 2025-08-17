@@ -1,0 +1,509 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Haqqımızda - Alisa Club{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section bg-gradient-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-6">
+                <h1 class="display-3 fw-bold mb-4 animate-fade-in">
+                    Alisa Club
+                    <span class="d-block text-warning">Haqqımızda</span>
+                </h1>
+                <p class="lead mb-4 opacity-90">
+                    Uşaqların inkişafı üçün yaradılmış xüsusi məkan - hər uşağın unikal potensialını ortaya çıxarmaq üçün
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#mission" class="btn btn-light btn-lg px-4 smooth-scroll">
+                        <i class="fas fa-arrow-down me-2"></i>Daha ətraflı
+                    </a>
+                    <a href="{% url 'membership:register' %}" class="btn btn-warning btn-lg px-4">
+                        <i class="fas fa-rocket me-2"></i>Qoşul
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image-container">
+                    <img src="/placeholder.svg?height=500&width=600&text=Alisa+Club" 
+                         alt="Alisa Club" class="img-fluid rounded-4 shadow-lg animate-float">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Decorative Elements -->
+    <div class="hero-decoration">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <!-- Mission Section -->
+    <section id="mission" class="mb-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <div class="mission-image-wrapper position-relative">
+                    <img src="/placeholder.svg?height=400&width=500&text=Mission" 
+                         alt="Bizim Missiyamız" class="img-fluid rounded-4 shadow">
+                    <div class="image-overlay rounded-4">
+                        <div class="overlay-content text-white text-center">
+                            <i class="fas fa-heart fa-3x mb-3"></i>
+                            <h4>Sevgi ilə Öyrədirik</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="content-wrapper pe-lg-4">
+                    <span class="badge bg-primary-soft text-primary mb-3 px-3 py-2">Bizim Missiyamız</span>
+                    <h2 class="display-6 fw-bold mb-4 text-dark">
+                        Hər Uşağın <span class="text-primary">Potensialına</span> İnanırıq
+                    </h2>
+                    <p class="text-muted mb-4 fs-5">
+                        Alisa Club olaraq, hər uşağın unikal potensialına inanırıq. Bizim məqsədimiz uşaqların 
+                        yaradıcılığını, sosial bacarıqlarını və təhsil sevgisini inkişaf etdirməkdir.
+                    </p>
+                    
+                    <div class="mission-points">
+                        <div class="point-item d-flex align-items-center mb-3">
+                            <div class="point-icon bg-success text-white rounded-circle me-3">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Yaradıcı Düşüncənin İnkişafı</h5>
+                                <p class="text-muted mb-0">İnovatif yanaşmalarla yaradıcılığı təşviq edirik</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item d-flex align-items-center mb-3">
+                            <div class="point-icon bg-info text-white rounded-circle me-3">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Sosial Bacarıqların Formalaşması</h5>
+                                <p class="text-muted mb-0">Komanda işi və ünsiyyət bacarıqları</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item d-flex align-items-center mb-3">
+                            <div class="point-icon bg-warning text-white rounded-circle me-3">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Təhsilə Marağın Artırılması</h5>
+                                <p class="text-muted mb-0">Öyrənmənin əyləncəli hala gətirilməsi</p>
+                            </div>
+                        </div>
+                        
+                        <div class="point-item d-flex align-items-center mb-3">
+                            <div class="point-icon bg-danger text-white rounded-circle me-3">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">Sağlam İnkişaf Mühitinin Yaradılması</h5>
+                                <p class="text-muted mb-0">Təhlükəsiz və dəstəkləyici atmosfer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section py-5 mb-5">
+        <div class="text-center mb-5">
+            <span class="badge bg-warning-soft text-warning mb-3 px-3 py-2">Üstünlüklərimiz</span>
+            <h2 class="display-6 fw-bold mb-3">Niyə Məhz <span class="text-primary">Alisa Club?</span></h2>
+            <p class="lead text-muted">Uşağınızın inkişafı üçün ən yaxşı şəraiti təmin edirik</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100 text-center p-4 rounded-4 shadow-hover">
+                    <div class="feature-icon-wrapper mb-4">
+                        <div class="feature-icon bg-primary text-white mb-3">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3">Peşəkar Komanda</h4>
+                    <p class="text-muted mb-4">Təcrübəli və sevgi dolu müəllimlər komandası ilə uşağınızın inkişafını təmin edirik</p>
+                    <div class="feature-stats">
+                        <span class="badge bg-primary-soft text-primary">15+ İl Təcrübə</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100 text-center p-4 rounded-4 shadow-hover">
+                    <div class="feature-icon-wrapper mb-4">
+                        <div class="feature-icon bg-success text-white mb-3">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3">Sevgi Dolu Mühit</h4>
+                    <p class="text-muted mb-4">Hər uşaq üçün təhlükəsiz və sevgi dolu atmosfer yaradırıq</p>
+                    <div class="feature-stats">
+                        <span class="badge bg-success-soft text-success">100% Təhlükəsiz</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="feature-card h-100 text-center p-4 rounded-4 shadow-hover">
+                    <div class="feature-icon-wrapper mb-4">
+                        <div class="feature-icon bg-warning text-white mb-3">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3">Keyfiyyətli Təhsil</h4>
+                    <p class="text-muted mb-4">Müasir metodlar və yaradıcı yanaşma ilə keyfiyyətli təhsil təqdim edirik</p>
+                    <div class="feature-stats">
+                        <span class="badge bg-warning-soft text-warning">Müasir Metodlar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section py-5 mb-5">
+        <div class="stats-bg rounded-4 p-5">
+            <div class="row text-center">
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <h3 class="stat-number text-white fw-bold mb-2" data-count="500">0</h3>
+                        <p class="text-white-50 mb-0">Xoşbəxt Uşaq</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <h3 class="stat-number text-white fw-bold mb-2" data-count="15">0</h3>
+                        <p class="text-white-50 mb-0">İl Təcrübə</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <h3 class="stat-number text-white fw-bold mb-2" data-count="25">0</h3>
+                        <p class="text-white-50 mb-0">Peşəkar Müəllim</p>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="stat-item">
+                        <h3 class="stat-number text-white fw-bold mb-2" data-count="98">0</h3>
+                        <p class="text-white-50 mb-0">% Məmnuniyyət</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section text-center py-5">
+        <div class="cta-content bg-light rounded-4 p-5">
+            <h3 class="display-6 fw-bold mb-4">Bizə Qoşulun!</h3>
+            <p class="lead text-muted mb-4">
+                Uşağınızın inkişaf səyahətində bizə şərik olun və onun potensialını birlikdə kəşf edək.
+            </p>
+            <div class="cta-buttons d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'membership:register' %}" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-rocket me-2"></i>İndi Başlayın
+                </a>
+                <a href="{% url 'core:contact' %}" class="btn btn-outline-primary btn-lg px-5">
+                    <i class="fas fa-phone me-2"></i>Bizimlə Əlaqə
+                </a>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+/* Hero Section Styles */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.min-vh-50 {
+    min-height: 50vh;
+}
+
+.animate-fade-in {
+    animation: fadeInUp 1s ease-out;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Floating Shapes */
+.hero-decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.floating-shapes .shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: floatShapes 6s ease-in-out infinite;
+}
+
+.shape-1 {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 60px;
+    height: 60px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape-3 {
+    width: 100px;
+    height: 100px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
+}
+
+@keyframes floatShapes {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(180deg); }
+}
+
+/* Badge Styles */
+.bg-primary-soft {
+    background-color: rgba(102, 126, 234, 0.1) !important;
+}
+
+.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+}
+
+.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.1) !important;
+}
+
+/* Mission Section */
+.mission-image-wrapper {
+    overflow: hidden;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mission-image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.point-icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Feature Cards */
+.feature-card {
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.shadow-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1) !important;
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    position: relative;
+}
+
+.feature-icon::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+/* Stats Section */
+.stats-bg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.stats-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.stat-number {
+    font-size: 3rem;
+}
+
+/* CTA Section */
+.cta-content {
+    border: 2px dashed rgba(102, 126, 234, 0.2);
+    position: relative;
+}
+
+/* Smooth Scrolling */
+.smooth-scroll {
+    scroll-behavior: smooth;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .display-3 {
+        font-size: 2.5rem;
+    }
+    
+    .display-6 {
+        font-size: 1.8rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .point-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .point-icon {
+        margin-bottom: 1rem;
+        margin-right: 0 !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate numbers
+    const numbers = document.querySelectorAll('.stat-number');
+    
+    const animateNumber = (element) => {
+        const target = parseInt(element.getAttribute('data-count'));
+        const increment = target / 50;
+        let current = 0;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            element.textContent = Math.floor(current);
+            
+            if (current >= target) {
+                element.textContent = target;
+                clearInterval(timer);
+            }
+        }, 50);
+    };
+    
+    // Intersection Observer for stats animation
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const numbers = entry.target.querySelectorAll('.stat-number');
+                numbers.forEach(number => {
+                    if (!number.classList.contains('animated')) {
+                        number.classList.add('animated');
+                        animateNumber(number);
+                    }
+                });
+            }
+        });
+    });
+    
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,616 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Blog - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern blog styling */
+    .blog-hero {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+        color: white;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .blog-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -30%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .blog-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite reverse;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+    
+    .search-section {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+        padding: 2rem;
+        margin-top: -60px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .search-form {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .search-input {
+        flex: 1;
+        border: 2px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 12px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+    
+    .search-input:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        background: white;
+        outline: none;
+    }
+    
+    .search-btn {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .search-btn:hover {
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    }
+    
+    .categories-section {
+        margin: 3rem 0;
+    }
+    
+    .category-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+    
+    .category-btn {
+        background: white;
+        color: #6b7280;
+        border: 2px solid #e5e7eb;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .category-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        text-decoration: none;
+    }
+    
+    .category-btn.active {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border-color: #8b5cf6;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .category-btn i {
+        margin-right: 8px;
+    }
+    
+    .featured-section {
+        margin-bottom: 4rem;
+    }
+    
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-title i {
+        margin-right: 15px;
+        color: #f59e0b;
+    }
+    
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+    
+    .blog-card {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+        transition: all 0.4s ease;
+        border: 2px solid transparent;
+        position: relative;
+    }
+    
+    .blog-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .blog-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .blog-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        border-color: #8b5cf6;
+    }
+    
+    .featured-card {
+        border: 3px solid #f59e0b;
+        position: relative;
+    }
+    
+    .featured-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        z-index: 2;
+    }
+    
+    .card-image {
+        height: 250px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .card-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    
+    .blog-card:hover .card-image img {
+        transform: scale(1.1);
+    }
+    
+    .card-placeholder {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #9ca3af;
+        font-size: 3rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .category-badge {
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: white;
+    }
+    
+    .read-time {
+        color: #6b7280;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .card-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #1f2937;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+    }
+    
+    .card-excerpt {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .card-stats {
+        display: flex;
+        gap: 1rem;
+        color: #9ca3af;
+        font-size: 0.9rem;
+    }
+    
+    .card-stats span {
+        display: flex;
+        align-items: center;
+    }
+    
+    .card-stats i {
+        margin-right: 5px;
+    }
+    
+    .read-btn {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 10px rgba(139, 92, 246, 0.3);
+    }
+    
+    .read-btn:hover {
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+    }
+    
+    .read-btn i {
+        margin-right: 5px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        color: #6b7280;
+        grid-column: 1 / -1;
+    }
+    
+    .empty-state i {
+        font-size: 5rem;
+        color: #d1d5db;
+        margin-bottom: 2rem;
+    }
+    
+    .empty-state h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #4b5563;
+    }
+    
+    .pagination-wrapper {
+        margin-top: 4rem;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .pagination {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        padding: 1rem;
+        border: none;
+    }
+    
+    .page-link {
+        border: none;
+        color: #6b7280;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 10px;
+        margin: 0 2px;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .page-item.active .page-link {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .blog-hero {
+            padding: 80px 0 60px;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .search-section {
+            margin-top: -40px;
+            padding: 1.5rem;
+        }
+        
+        .search-form {
+            flex-direction: column;
+        }
+        
+        .search-btn {
+            width: 100%;
+        }
+        
+        .blog-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .category-filters {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern hero section -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title">📚 Alisa Club Bloqu</h1>
+            <p class="hero-subtitle">Uşaq inkişafı və valideynlik haqqında faydalı məqalələr</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Enhanced Search Section -->
+    <div class="search-section">
+        <form method="get" class="search-form">
+            <input type="text" name="search" class="search-input" placeholder="Məqalələrdə axtar..." value="{{ search_query }}">
+            <button type="submit" class="search-btn">
+                <i class="fas fa-search me-2"></i>Axtar
+            </button>
+        </form>
+    </div>
+
+    <!-- Enhanced Categories -->
+    <div class="categories-section">
+        <div class="category-filters">
+            <a href="{% url 'blog:blog_list' %}" class="category-btn {% if not selected_category %}active{% endif %}">
+                <i class="fas fa-th-large"></i>Hamısı
+            </a>
+            {% for category in categories %}
+            <a href="{% url 'blog:category_posts' category.slug %}" 
+               class="category-btn {% if selected_category == category.slug %}active{% endif %}"
+               style="{% if selected_category == category.slug %}background: {{ category.color }}; border-color: {{ category.color }}; color: white;{% else %}border-color: {{ category.color }}; color: {{ category.color }};{% endif %}">
+                <i class="{{ category.icon }}"></i>{{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Enhanced Featured Posts -->
+    {% if featured_posts and not search_query %}
+    <div class="featured-section">
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>Seçilmiş Məqalələr
+        </h2>
+        <div class="blog-grid">
+            {% for post in featured_posts %}
+            <div class="blog-card featured-card">
+                <div class="featured-badge">
+                    <i class="fas fa-star me-1"></i>Seçilmiş
+                </div>
+                <div class="card-image">
+                    {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div class="card-placeholder">
+                            <i class="{{ post.category.icon }}"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <div class="card-meta">
+                        <span class="category-badge" style="background-color: {{ post.category.color }};">
+                            {{ post.category.name }}
+                        </span>
+                        <span class="read-time">{{ post.read_time }} dəq</span>
+                    </div>
+                    
+                    <h3 class="card-title">{{ post.title }}</h3>
+                    <p class="card-excerpt">{{ post.excerpt }}</p>
+                    
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span><i class="fas fa-calendar"></i>{{ post.published_at|date:"d.m.Y" }}</span>
+                            <span><i class="fas fa-eye"></i>{{ post.views_count }}</span>
+                        </div>
+                        <a href="{{ post.get_absolute_url }}" class="read-btn">
+                            <i class="fas fa-arrow-right"></i>Oxu
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Enhanced Blog Posts -->
+    <div class="blog-posts-section">
+        {% if search_query %}
+        <h2 class="section-title">
+            <i class="fas fa-search"></i>"{{ search_query }}" üçün axtarış nəticələri
+        </h2>
+        {% endif %}
+        
+        <div class="blog-grid">
+            {% for post in page_obj %}
+            <div class="blog-card">
+                <div class="card-image">
+                    {% if post.featured_image %}
+                        <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                    {% else %}
+                        <div class="card-placeholder" style="background: linear-gradient(135deg, {{ post.category.color }}22, {{ post.category.color }}44);">
+                            <i class="{{ post.category.icon }}" style="color: {{ post.category.color }};"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <div class="card-meta">
+                        <span class="category-badge" style="background-color: {{ post.category.color }};">
+                            {{ post.category.name }}
+                        </span>
+                        <span class="read-time">{{ post.read_time }} dəq</span>
+                    </div>
+                    
+                    <h3 class="card-title">{{ post.title }}</h3>
+                    <p class="card-excerpt">{{ post.excerpt }}</p>
+                    
+                    <div class="card-footer">
+                        <div class="card-stats">
+                            <span><i class="fas fa-calendar"></i>{{ post.published_at|date:"d.m.Y" }}</span>
+                            <span><i class="fas fa-eye"></i>{{ post.views_count }}</span>
+                        </div>
+                        <a href="{{ post.get_absolute_url }}" class="read-btn">
+                            <i class="fas fa-arrow-right"></i>Oxu
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-search"></i>
+                <h3>Məqalə tapılmadı</h3>
+                <p>Axtarış kriteriyalarınızı dəyişdirməyi cəhd edin.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Enhanced Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination-wrapper">
+        <nav aria-label="Blog pagination">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

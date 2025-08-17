@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Qeydiyyat - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(180deg); }
+    }
+
+    .animate-float {
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .form-control-modern {
+        border-radius: 0.75rem;
+        border: 2px solid #e5e7eb;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-control-modern:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+        background: white;
+    }
+
+    .form-control-modern::placeholder {
+        color: #9ca3af;
+    }
+
+    .form-control-modern:valid { border-color: #10b981; }
+    .form-control-modern:invalid { border-color: #ef4444; }
+
+    @media (max-width: 768px) {
+        .text-4xl { font-size: 2rem; }
+        .container { padding-left: 1rem; padding-right: 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .text-4xl { font-size: 1.5rem; }
+        .container { padding-left: 0.5rem; padding-right: 0.5rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-pink-100 via-pink-50 to-rose-100 flex items-center justify-center py-12 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none z-10">
+        <i class="absolute text-2xl text-rose-200 animate-float" style="top: 15%; left: 8%;">⭐</i>
+        <i class="absolute text-2xl text-yellow-200 animate-float" style="top: 25%; right: 12%; animation-delay: 2s;">❤️</i>
+        <i class="absolute text-2xl text-teal-200 animate-float" style="top: 65%; left: 10%; animation-delay: 4s;">✨</i>
+        <i class="absolute text-2xl text-pink-200 animate-float" style="bottom: 20%; right: 15%; animation-delay: 1s;">👑</i>
+        <i class="absolute text-2xl text-indigo-200 animate-float" style="bottom: 40%; left: 12%; animation-delay: 3s;">🌈</i>
+        <i class="absolute text-2xl text-rose-200 animate-float" style="top: 45%; right: 8%; animation-delay: 5s;">🧸</i>
+    </div>
+
+    <div class="container mx-auto px-4">
+        <div class="max-w-2xl mx-auto bg-white bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-xl relative z-20 overflow-hidden">
+            <div class="p-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-rose-700" style="font-family: 'Fredoka', cursive;">
+                    Alisa Club-a Qoşulun
+                </h2>
+                <p class="text-rose-500 mt-2 text-sm md:text-base">Uşağınızın möcüzəli səyahətinə başlayın</p>
+            </div>
+
+            <form method="post" class="p-6 space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-user mr-2"></i>Ad
+                        </label>
+                        {{ user_form.first_name|add_class:"form-control-modern"|attr:"placeholder:Adınızı daxil edin" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-user mr-2"></i>Soyad
+                        </label>
+                        {{ user_form.last_name|add_class:"form-control-modern"|attr:"placeholder:Soyadınızı daxil edin" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-at mr-2"></i>İstifadəçi adı
+                        </label>
+                        {{ user_form.username|add_class:"form-control-modern"|attr:"placeholder:İstifadəçi adınızı seçin" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-envelope mr-2"></i>Email
+                        </label>
+                        {{ user_form.email|add_class:"form-control-modern"|attr:"placeholder:Email ünvanınızı daxil edin" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-lock mr-2"></i>Şifrə
+                        </label>
+                        {{ user_form.password1|add_class:"form-control-modern"|attr:"placeholder:Güclü şifrə yaradın" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-lock mr-2"></i>Şifrəni təkrarlayın
+                        </label>
+                        {{ user_form.password2|add_class:"form-control-modern"|attr:"placeholder:Şifrənizi təkrar daxil edin" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-phone mr-2"></i>Telefon
+                        </label>
+                        {{ profile_form.phone|add_class:"form-control-modern"|attr:"placeholder:+994 XX XXX XX XX" }}
+                    </div>
+                    <div>
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-phone-alt mr-2"></i>Təcili əlaqə
+                        </label>
+                        {{ profile_form.emergency_phone|add_class:"form-control-modern"|attr:"placeholder:+994 XX XXX XX XX" }}
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-map-marker-alt mr-2"></i>Ünvan
+                        </label>
+                        {{ profile_form.address|add_class:"form-control-modern"|attr:"placeholder:Yaşadığınız ünvanı daxil edin" }}
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-rose-700 font-semibold text-sm mb-2">
+                            <i class="fas fa-user-friends mr-2"></i>Təcili əlaqə şəxsi
+                        </label>
+                        {{ profile_form.emergency_contact|add_class:"form-control-modern"|attr:"placeholder:Təcili halda əlaqə saxlanılacaq şəxsin adı" }}
+                    </div>
+                </div>
+
+                <button type="submit" 
+                        class="w-full bg-gradient-to-r from-green-400 to-teal-400 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <i class="fas fa-user-plus mr-2"></i>Qeydiyyatdan Keç
+                </button>
+
+                <div class="text-center text-rose-600 text-sm">
+                    <p class="mb-0">
+                        Artıq hesabınız var?
+                        <a href="{% url 'membership:login' %}" class="text-green-500 hover:text-teal-600 font-semibold hover:underline">Giriş edin</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}

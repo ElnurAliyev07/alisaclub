@@ -1,0 +1,295 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - Alisa Club{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #f0f9ff 0%, #fff5e6 100%);
+        color: #2d3748;
+        font-family: 'Inter', sans-serif;
+    }
+    :root {
+        --primary: #ff6b6b;
+        --secondary: #718096;
+        --success: #38a169;
+        --warning: #ecc94b;
+        --info: #4299e1;
+        --light: #f7fafc;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .card {
+        border: none;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background-color: #e65b5b;
+        border-color: #e65b5b;
+    }
+    .btn-outline-primary {
+        border-color: var(--primary);
+        color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .hero-section {
+        background: linear-gradient(135deg, #5f99f5ff 0%, #a6dcf5ff 100%);
+        position: relative;
+        overflow: hidden;
+        min-height: 300px;
+    }
+    .floating {
+        animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+    .event-image img {
+        transition: transform 0.3s ease;
+    }
+    .event-image:hover img {
+        transform: scale(1.05);
+    }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-section py-5">
+    <div class="position-absolute w-100 h-100 floating"></div>
+    <div class="container position-relative py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="text-white">
+                    <div class="d-flex align-items-center mb-3 flex-wrap gap-2">
+                        <span class="badge" style="background: {{ event.category.color }};"><i class="{{ event.category.icon }} me-2"></i>{{ event.category.name }}</span>
+                        <span class="badge bg-light text-dark"><i class="fas fa-child me-2"></i>{{ event.get_age_group_display }}</span>
+                    </div>
+                    <h1 class="display-4 fw-bold mb-3">{{ event.title }}</h1>
+                    <p class="lead mb-0">{{ event.description }}</p>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                {% if avg_rating %}
+                <div class="text-white">
+                    <div class="mb-2">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="h4 mb-0">{{ avg_rating|floatformat:1 }}/5</div>
+                    <small>Ortalama Reytinq</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Event Image -->
+            <div class="card event-image mb-4">
+                {% if event.image %}
+                <img src="{{ event.image.url }}" class="img-fluid rounded-3" alt="{{ event.title }}" style="height: 350px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-3 bg-primary text-white d-flex align-items-center justify-content-center" style="height: 350px;">
+                    <i class="fas fa-calendar-alt fa-4x"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Event Info -->
+            <div class="row g-3 mb-5">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-calendar fa-2x text-primary mb-3"></i>
+                            <h6 class="fw-bold text-muted mb-2">Tarix</h6>
+                            <p class="h5 mb-0">{{ event.date|date:"d F Y" }}</p>
+                            <small class="text-muted">{{ event.date|date:"l" }}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-clock fa-2x text-success mb-3"></i>
+                            <h6 class="fw-bold text-muted mb-2">Vaxt</h6>
+                            <p class="h5 mb-0">{{ event.date|date:"H:i" }}</p>
+                            <small class="text-muted">{{ event.duration }} dəq</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-map-marker-alt fa-2x text-warning mb-3"></i>
+                            <h6 class="fw-bold text-muted mb-2">Yer</h6>
+                            <p class="h6 mb-0">{{ event.location }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-users fa-2x text-info mb-3"></i>
+                            <h6 class="fw-bold text-muted mb-2">İştirakçılar</h6>
+                            <p class="h5 mb-2">{{ event.booking_count }}/{{ event.max_participants }}</p>
+                            <div class="progress">
+                                <div class="progress-bar bg-info" style="width: {% widthratio event.booking_count event.max_participants 100 %}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            {% if event.requirements %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-exclamation-triangle fa-2x text-warning me-3"></i>
+                        <h5 class="fw-bold mb-0">Tələblər</h5>
+                    </div>
+                    <p class="text-muted">{{ event.requirements }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% if event.what_to_bring %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-backpack fa-2x text-primary me-3"></i>
+                        <h5 class="fw-bold mb-0">Nə gətirmək lazımdır</h5>
+                    </div>
+                    <p class="text-muted">{{ event.what_to_bring }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Reviews -->
+            {% if reviews %}
+            <div class="mt-5">
+                <div class="d-flex align-items-center mb-4">
+                    <h3 class="fw-bold me-3">Rəylər</h3>
+                    <span class="badge bg-primary rounded-pill">{{ reviews|length }}</span>
+                </div>
+                {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex align-items-start">
+                            <div class="bg-primary rounded-circle text-white d-flex align-items-center justify-content-center me-3" style="width: 48px; height: 48px;">
+                                {{ review.user.get_full_name|default:review.user.username|first|upper }}
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <h6 class="fw-bold mb-1">{{ review.user.get_full_name|default:review.user.username }}</h6>
+                                        <div class="text-warning">
+                                            {% for i in "12345" %}
+                                            {% if forloop.counter <= review.rating %}
+                                            <i class="fas fa-star"></i>
+                                            {% else %}
+                                            <i class="far fa-star"></i>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+                                </div>
+                                <p class="mb-0 text-muted">{{ review.comment }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 2rem;">
+                <div class="card mb-4">
+                    <div class="card-body p-0">
+                        <div class="text-center p-4 bg-primary text-white">
+                            <div class="h3 fw-bold mb-0">{{ event.price }} ₼</div>
+                            <small>hər uşaq üçün</small>
+                        </div>
+                        <div class="p-4">
+                            {% if event.is_full %}
+                            <div class="alert alert-danger text-center">
+                                <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                <div class="fw-bold">Yer qalmayıb</div>
+                            </div>
+                            {% elif user.is_authenticated %}
+                            {% if user_booking %}
+                            <div class="alert alert-success text-center">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <div class="fw-bold">Rezervasiya edilib</div>
+                            </div>
+                            <a href="{% url 'events:cancel_booking' user_booking.id %}" class="btn btn-outline-primary w-100">Ləğv Et</a>
+                            {% else %}
+                            <a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary w-100 mb-2">Rezervasiya Et</a>
+                            <div class="text-center text-success">
+                                <i class="fas fa-check-circle me-2"></i>{{ event.available_spots }} yer
+                            </div>
+                            {% endif %}
+                            {% else %}
+                            <a href="{% url 'membership:login' %}" class="btn btn-primary w-100">Giriş</a>
+                            {% endif %}
+                            {% if can_review %}
+                            <a href="{% url 'events:add_review' event.pk %}" class="btn btn-outline-warning w-100 mt-2">Rəy Yaz</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="fw-bold text-muted mb-3">Xüsusiyyətlər</h6>
+                        <div class="d-flex align-items-center mb-2 text-muted"><i class="fas fa-shield-alt text-success me-2"></i>Təhlükəsizlik</div>
+                        <div class="d-flex align-items-center mb-2 text-muted"><i class="fas fa-graduation-cap text-primary me-2"></i>Peşəkarlar</div>
+                        <div class="d-flex align-items-center mb-2 text-muted"><i class="fas fa-heart text-danger me-2"></i>Yaş uyğunluğu</div>
+                        <div class="d-flex align-items-center text-muted"><i class="fas fa-certificate text-warning me-2"></i>Sertifikat</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

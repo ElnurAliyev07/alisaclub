@@ -1,0 +1,742 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - Blog - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern blog post detail styling */
+    .post-hero {
+        background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+        color: white;
+        padding: 80px 0 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .post-hero::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .post-container {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+        margin-top: -40px;
+        position: relative;
+        z-index: 10;
+        overflow: hidden;
+    }
+    
+    .post-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    }
+    
+    .post-header {
+        padding: 3rem 3rem 2rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .category-badge {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .category-badge i {
+        margin-right: 8px;
+    }
+    
+    .read-time {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+    
+    .post-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 3rem;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+    
+    .post-author-info {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        color: #6b7280;
+        font-weight: 500;
+        flex-wrap: wrap;
+    }
+    
+    .author-item {
+        display: flex;
+        align-items: center;
+    }
+    
+    .author-item i {
+        margin-right: 8px;
+        color: #8b5cf6;
+    }
+    
+    .post-image {
+        padding: 0 3rem 2rem;
+    }
+    
+    .post-image img {
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+    
+    .post-content {
+        padding: 2rem 3rem;
+    }
+    
+    .post-excerpt {
+        font-size: 1.3rem;
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 15px;
+        border-left: 4px solid #8b5cf6;
+    }
+    
+    .content-body {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #374151;
+    }
+    
+    .content-body p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .content-body h2, .content-body h3, .content-body h4 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 2rem 0 1rem;
+    }
+    
+    .tags-section {
+        padding: 2rem 3rem;
+        border-top: 1px solid #f3f4f6;
+    }
+    
+    .tags-title {
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .tags-title i {
+        margin-right: 8px;
+        color: #8b5cf6;
+    }
+    
+    .tags-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .tag-item {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        color: #4b5563;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-weight: 500;
+        font-size: 0.9rem;
+        border: 1px solid #d1d5db;
+        display: flex;
+        align-items: center;
+    }
+    
+    .tag-item i {
+        margin-right: 5px;
+        font-size: 0.8rem;
+    }
+    
+    .share-section {
+        padding: 2rem 3rem;
+        border-top: 1px solid #f3f4f6;
+    }
+    
+    .share-title {
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .share-title i {
+        margin-right: 8px;
+        color: #8b5cf6;
+    }
+    
+    .share-buttons {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+    
+    .share-btn {
+        padding: 10px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .share-btn:hover {
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+    
+    .share-btn i {
+        margin-right: 8px;
+    }
+    
+    .share-facebook {
+        background: linear-gradient(135deg, #1877f2, #166fe5);
+        color: white;
+        box-shadow: 0 5px 15px rgba(24, 119, 242, 0.3);
+    }
+    
+    .share-facebook:hover {
+        background: linear-gradient(135deg, #166fe5, #1464d8);
+        color: white;
+        box-shadow: 0 8px 25px rgba(24, 119, 242, 0.4);
+    }
+    
+    .share-twitter {
+        background: linear-gradient(135deg, #1da1f2, #1a91da);
+        color: white;
+        box-shadow: 0 5px 15px rgba(29, 161, 242, 0.3);
+    }
+    
+    .share-twitter:hover {
+        background: linear-gradient(135deg, #1a91da, #1781c2);
+        color: white;
+        box-shadow: 0 8px 25px rgba(29, 161, 242, 0.4);
+    }
+    
+    .share-whatsapp {
+        background: linear-gradient(135deg, #25d366, #22c55e);
+        color: white;
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+    
+    .share-whatsapp:hover {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+    }
+    
+    .comments-section {
+        padding: 3rem;
+        border-top: 1px solid #f3f4f6;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    
+    .comments-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .comments-title i {
+        margin-right: 15px;
+        color: #8b5cf6;
+    }
+    
+    .comment-form-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .comment-form-card:hover {
+        border-color: #8b5cf6;
+    }
+    
+    .comment-form-title {
+        font-weight: 700;
+        color: #374151;
+        margin-bottom: 1rem;
+    }
+    
+    .comment-textarea {
+        width: 100%;
+        border: 2px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 15px;
+        font-size: 1rem;
+        resize: vertical;
+        min-height: 120px;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+    
+    .comment-textarea:focus {
+        border-color: #8b5cf6;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        background: white;
+        outline: none;
+    }
+    
+    .comment-submit {
+        background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 15px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+    }
+    
+    .comment-submit:hover {
+        background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+    }
+    
+    .login-alert {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        border: 2px solid #3b82f6;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        color: #1e40af;
+    }
+    
+    .login-alert i {
+        margin-right: 10px;
+    }
+    
+    .login-alert a {
+        color: #1d4ed8;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .login-alert a:hover {
+        text-decoration: underline;
+    }
+    
+    .comment-item {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #8b5cf6;
+        transition: all 0.3s ease;
+    }
+    
+    .comment-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+    
+    .comment-author {
+        font-weight: 700;
+        color: #1f2937;
+        font-size: 1.1rem;
+    }
+    
+    .comment-date {
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+    
+    .comment-content {
+        color: #374151;
+        line-height: 1.6;
+    }
+    
+    .sidebar {
+        padding-left: 2rem;
+    }
+    
+    .sidebar-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 2rem;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar-card:hover {
+        border-color: #8b5cf6;
+        transform: translateY(-5px);
+    }
+    
+    .sidebar-header {
+        background: linear-gradient(135deg, #1f2937, #374151);
+        color: white;
+        padding: 1.5rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+    }
+    
+    .sidebar-header i {
+        margin-right: 10px;
+    }
+    
+    .sidebar-body {
+        padding: 0;
+    }
+    
+    .related-post {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f3f4f6;
+        transition: all 0.3s ease;
+    }
+    
+    .related-post:last-child {
+        border-bottom: none;
+    }
+    
+    .related-post:hover {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    }
+    
+    .related-post-title {
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+    }
+    
+    .related-post-title a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .related-post-title a:hover {
+        color: #8b5cf6;
+    }
+    
+    .related-post-date {
+        color: #6b7280;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .related-post-date i {
+        margin-right: 5px;
+    }
+    
+    .category-link {
+        display: block;
+        padding: 1.5rem;
+        color: #1f2937;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .category-link:hover {
+        background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+        color: #8b5cf6;
+        text-decoration: none;
+    }
+    
+    .category-link i {
+        margin-right: 10px;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .post-hero {
+            padding: 60px 0 40px;
+        }
+        
+        .post-container {
+            margin-top: -20px;
+        }
+        
+        .post-header, .post-content, .tags-section, .share-section, .comments-section {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        .post-image {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        .post-title {
+            font-size: 2rem;
+        }
+        
+        .post-author-info {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .sidebar {
+            padding-left: 0;
+            margin-top: 2rem;
+        }
+        
+        .share-buttons {
+            flex-direction: column;
+        }
+        
+        .share-btn {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern hero section -->
+<section class="post-hero">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-6 fw-bold mb-3">Blog Məqaləsi</h1>
+            <p class="lead">{{ post.category.name }} kateqoriyasından</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <div class="post-container">
+                <!-- Enhanced Post Header -->
+                <div class="post-header">
+                    <div class="post-meta">
+                        <span class="category-badge" style="background: {{ post.category.color }};">
+                            <i class="{{ post.category.icon }}"></i>{{ post.category.name }}
+                        </span>
+                        <span class="read-time">{{ post.read_time }} dəqiqə oxu</span>
+                    </div>
+                    
+                    <h1 class="post-title">{{ post.title }}</h1>
+                    
+                    <div class="post-author-info">
+                        <div class="author-item">
+                            <i class="fas fa-user"></i>
+                            {{ post.author.get_full_name|default:post.author.username }}
+                        </div>
+                        <div class="author-item">
+                            <i class="fas fa-calendar"></i>
+                            {{ post.published_at|date:"d F Y" }}
+                        </div>
+                        <div class="author-item">
+                            <i class="fas fa-eye"></i>
+                            {{ post.views_count }} baxış
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Featured Image -->
+                {% if post.featured_image %}
+                <div class="post-image">
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                </div>
+                {% endif %}
+
+                <!-- Enhanced Post Content -->
+                <div class="post-content">
+                    <div class="post-excerpt">{{ post.excerpt }}</div>
+                    <div class="content-body">{{ post.content|linebreaks }}</div>
+                </div>
+
+                <!-- Enhanced Tags -->
+                {% if post.tags %}
+                <div class="tags-section">
+                    <h6 class="tags-title">
+                        <i class="fas fa-tags"></i>Etiketlər
+                    </h6>
+                    <div class="tags-list">
+                        {% for tag in post.get_tags_list %}
+                        <span class="tag-item">
+                            <i class="fas fa-tag"></i>{{ tag }}
+                        </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Enhanced Share Buttons -->
+                <div class="share-section">
+                    <h6 class="share-title">
+                        <i class="fas fa-share-alt"></i>Paylaş
+                    </h6>
+                    <div class="share-buttons">
+                        <a href="#" class="share-btn share-facebook">
+                            <i class="fab fa-facebook-f"></i>Facebook
+                        </a>
+                        <a href="#" class="share-btn share-twitter">
+                            <i class="fab fa-twitter"></i>Twitter
+                        </a>
+                        <a href="#" class="share-btn share-whatsapp">
+                            <i class="fab fa-whatsapp"></i>WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Enhanced Comments Section -->
+                <div class="comments-section">
+                    <h4 class="comments-title">
+                        <i class="fas fa-comments"></i>Şərhlər ({{ comments.count }})
+                    </h4>
+
+                    <!-- Enhanced Comment Form -->
+                    {% if user.is_authenticated %}
+                    <div class="comment-form-card">
+                        <h6 class="comment-form-title">Şərh yaz</h6>
+                        <form method="post">
+                            {% csrf_token %}
+                            <textarea name="content" class="comment-textarea" placeholder="Şərhinizi yazın..." required></textarea>
+                            <button type="submit" class="comment-submit">
+                                <i class="fas fa-paper-plane me-2"></i>Göndər
+                            </button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="login-alert">
+                        <i class="fas fa-info-circle"></i>
+                        Şərh yazmaq üçün <a href="{% url 'membership:login' %}">giriş edin</a>.
+                    </div>
+                    {% endif %}
+
+                    <!-- Enhanced Comments List -->
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                        <div class="comment-item">
+                            <div class="comment-header">
+                                <div class="comment-author">{{ comment.author.get_full_name|default:comment.author.username }}</div>
+                                <div class="comment-date">{{ comment.created_at|date:"d.m.Y H:i" }}</div>
+                            </div>
+                            <div class="comment-content">{{ comment.content|linebreaks }}</div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-comment fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Hələ ki şərh yoxdur. İlk şərhi siz yazın!</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Sidebar -->
+        <div class="col-lg-4">
+            <div class="sidebar">
+                <!-- Enhanced Related Posts -->
+                {% if related_posts %}
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <i class="fas fa-newspaper"></i>Oxşar Məqalələr
+                    </div>
+                    <div class="sidebar-body">
+                        {% for related_post in related_posts %}
+                        <div class="related-post">
+                            <h6 class="related-post-title">
+                                <a href="{{ related_post.get_absolute_url }}">
+                                    {{ related_post.title }}
+                                </a>
+                            </h6>
+                            <div class="related-post-date">
+                                <i class="fas fa-calendar"></i>{{ related_post.published_at|date:"d.m.Y" }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Enhanced Categories -->
+                <div class="sidebar-card">
+                    <div class="sidebar-header">
+                        <i class="fas fa-folder"></i>Kateqoriyalar
+                    </div>
+                    <div class="sidebar-body">
+                        <a href="{% url 'blog:category_posts' post.category.slug %}" class="category-link">
+                            <i class="{{ post.category.icon }}" style="color: {{ post.category.color }};"></i>
+                            {{ post.category.name }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,405 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ad Günü Paketləri - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern birthday planner styling */
+    .birthday-hero {
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 50%, #9d174d 100%);
+        color: white;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .birthday-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -30%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .birthday-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite reverse;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+    
+    .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+    }
+    
+    .package-card {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(236, 72, 153, 0.15);
+        overflow: hidden;
+        transition: all 0.4s ease;
+        border: 2px solid transparent;
+        position: relative;
+    }
+    
+    .package-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .package-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .package-card:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 30px 60px rgba(236, 72, 153, 0.25);
+        border-color: #ec4899;
+    }
+    
+    .package-image {
+        height: 280px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .package-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    
+    .package-card:hover .package-image img {
+        transform: scale(1.1);
+    }
+    
+    .package-placeholder {
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 4rem;
+    }
+    
+    .package-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+    }
+    
+    .package-body {
+        padding: 2rem;
+    }
+    
+    .package-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+    
+    .package-name {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 1.8rem;
+        color: #1f2937;
+        margin: 0;
+    }
+    
+    .package-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #10b981;
+        font-family: 'Playfair Display', serif;
+    }
+    
+    .package-description {
+        color: #6b7280;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .package-features {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .feature-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        color: #4b5563;
+        font-weight: 500;
+    }
+    
+    .feature-item i {
+        color: #ec4899;
+        margin-right: 8px;
+        width: 20px;
+    }
+    
+    .package-actions {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1rem;
+    }
+    
+    .btn-detail {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        color: #374151;
+        border: 2px solid #d1d5db;
+        padding: 12px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-detail:hover {
+        background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+        color: #1f2937;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+    
+    .btn-book {
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3);
+    }
+    
+    .btn-book:hover {
+        background: linear-gradient(135deg, #be185d, #9d174d);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+    }
+    
+    .btn-login {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-login:hover {
+        background: linear-gradient(135deg, #1d4ed8, #1e40af);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 5rem 2rem;
+        color: #6b7280;
+        grid-column: 1 / -1;
+    }
+    
+    .empty-state i {
+        font-size: 5rem;
+        color: #d1d5db;
+        margin-bottom: 2rem;
+    }
+    
+    .empty-state h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #4b5563;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .birthday-hero {
+            padding: 80px 0 60px;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .packages-grid {
+            grid-template-columns: 1fr;
+            margin-top: -60px;
+        }
+        
+        .feature-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .package-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern hero section -->
+<section class="birthday-hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="hero-title">🎉 Ad Günü Paketləri</h1>
+            <p class="hero-subtitle">Uşağınızın ad gününü unudulmaz etmək üçün mükəmməl paketlər</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Enhanced Packages Grid -->
+    <div class="packages-grid">
+        {% for package in packages %}
+        <div class="package-card">
+            <div class="package-image">
+                {% if package.image %}
+                    <img src="{{ package.image.url }}" alt="{{ package.name }}">
+                {% else %}
+                    <div class="package-placeholder">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                {% endif %}
+                <div class="package-badge">{{ package.get_package_type_display }}</div>
+            </div>
+            
+            <div class="package-body">
+                <div class="package-header">
+                    <h3 class="package-name">{{ package.name }}</h3>
+                    <div class="package-price">{{ package.price }} ₼</div>
+                </div>
+                
+                <p class="package-description">{{ package.description|truncatewords:25 }}</p>
+                
+                <div class="package-features">
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-clock"></i>
+                            {{ package.duration_hours }} saat
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-users"></i>
+                            {{ package.max_guests }} qonaq
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-birthday-cake"></i>
+                            Tort daxil
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-music"></i>
+                            Musiqi sistemi
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="package-actions">
+                    <a href="{% url 'birthday:package_detail' package.pk %}" class="btn-detail">
+                        <i class="fas fa-info-circle me-2"></i>Ətraflı
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'birthday:book_birthday' package.pk %}" class="btn-book">
+                            <i class="fas fa-calendar-plus me-2"></i>Rezervasiya Et
+                        </a>
+                    {% else %}
+                        <a href="{% url 'membership:login' %}" class="btn-login">
+                            <i class="fas fa-sign-in-alt me-2"></i>Rezervasiya üçün Giriş
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class="fas fa-birthday-cake"></i>
+            <h3>Hələ ki paket əlavə edilməyib</h3>
+            <p>Tezliklə gözəl ad günü paketləri əlavə ediləcək!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

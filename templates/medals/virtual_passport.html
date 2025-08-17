@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Virtual Pasport - {{ child.name }} - Alisa Club{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Passport Card -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #1e3c72, #2a5298);">
+                <div class="card-body text-white p-5">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if child.photo %}
+                                <img src="{{ child.photo.url }}" alt="{{ child.name }}" 
+                                     class="rounded-circle border border-white border-3" width="120" height="120">
+                            {% else %}
+                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border border-3" 
+                                     style="width: 120px; height: 120px;">
+                                    <i class="fas fa-child fa-4x text-primary"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h2 class="fw-bold mb-1">{{ child.name }} {{ child.surname }}</h2>
+                                    <p class="mb-0 opacity-75">{{ child.age }} yaş</p>
+                                </div>
+                                <div class="text-end">
+                                    <h4 class="fw-bold mb-0">Səviyyə {{ passport.level }}</h4>
+                                    <small class="opacity-75">{{ passport.total_points }} xal</small>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <div class="bg-white bg-opacity-20 rounded p-2 text-center">
+                                        <div class="fw-bold">{{ passport.medal_count }}</div>
+                                        <small>Ümumi Medal</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-white bg-opacity-20 rounded p-2 text-center">
+                                        <div class="fw-bold">{{ child.achievements.count }}</div>
+                                        <small>Nailiyyət</small>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small>Növbəti səviyyəyə qədər</small>
+                                    <small>{{ passport.next_level_points }} xal</small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" 
+                                         style="width: {{ passport.experience_points|floatformat:0 }}%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <small class="opacity-75">Pasport #{{ passport.passport_number }}</small>
+                                </div>
+                                <div>
+                                    <small class="opacity-75">{{ passport.issue_date|date:"d.m.Y" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Medal Statistics -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-medal fa-2x text-warning mb-2"></i>
+                    <h4 class="fw-bold text-warning">{{ passport.bronze_medals }}</h4>
+                    <small class="text-muted">Bürünc Medal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-medal fa-2x text-secondary mb-2"></i>
+                    <h4 class="fw-bold text-secondary">{{ passport.silver_medals }}</h4>
+                    <small class="text-muted">Gümüş Medal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-medal fa-2x text-warning mb-2"></i>
+                    <h4 class="fw-bold text-warning">{{ passport.gold_medals }}</h4>
+                    <small class="text-muted">Qızıl Medal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-star fa-2x text-primary mb-2"></i>
+                    <h4 class="fw-bold text-primary">{{ passport.total_points }}</h4>
+                    <small class="text-muted">Ümumi Xal</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-medal me-2"></i>Son Medallər
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_medals %}
+                        {% for user_medal in recent_medals %}
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="me-3">
+                                    <i class="{{ user_medal.medal.icon }} fa-2x {{ user_medal.medal.color_class }}"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">{{ user_medal.medal.name }}</h6>
+                                    <small class="text-muted">{{ user_medal.earned_date|date:"d M Y" }}</small>
+                                </div>
+                                <div>
+                                    <span class="badge bg-warning">{{ user_medal.medal.points }} xal</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-medal fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">Hələ medal qazanmamısınız</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Xal Tarixçəsi
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if point_history %}
+                        {% for history in point_history %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <div>
+                                    <small class="fw-bold">{{ history.source }}</small><br>
+                                    <small class="text-muted">{{ history.created_at|date:"d M Y H:i" }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-{% if history.points > 0 %}success{% else %}danger{% endif %}">
+                                        {% if history.points > 0 %}+{% endif %}{{ history.points }} xal
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-center py-3">
+                            <i class="fas fa-chart-line fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0">Hələ xal tarixçəsi yoxdur</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

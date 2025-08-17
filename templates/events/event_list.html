@@ -1,0 +1,311 @@
+    {% extends 'base.html' %}
+    {% load static %}
+
+    {% block title %}Tədbirlər - Alisa Club{% endblock %}
+
+    {% block content %}
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #fff5e6 100%);
+            color: #2d3748;
+            font-family: 'Inter', sans-serif;
+        }
+        :root {
+            --primary: #ff6b6b;
+            --secondary: #718096;
+            --success: #38a169;
+            --warning: #ecc94b;
+            --info: #4299e1;
+            --light: #f7fafc;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .card {
+            border: none;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+        .btn-primary:hover {
+            background-color: #e65b5b;
+            border-color: #e65b5b;
+        }
+        .btn-outline-primary {
+            border-color: var(--primary);
+            color: var(--primary);
+            border-radius: 8px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #5f99f5ff 0%, #a6dcf5ff 100%);
+            position: relative;
+            overflow: hidden;
+            min-height: 50vh;
+        }
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+        }
+        .form-select {
+            appearance: none;
+            background-image: none;
+            padding-right: 2.5rem;
+        }
+        .empty-state {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 3rem;
+        }
+        .stats-card {
+            transition: transform 0.3s ease;
+        }
+        .stats-card:hover {
+            transform: translateY(-4px);
+        }
+        .event-card img {
+            transition: transform 0.3s ease;
+        }
+        .event-card:hover img {
+            transform: scale(1.05);
+        }
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+        .pagination .page-link {
+            border: none;
+            border-radius: 8px;
+            margin: 0 0.25rem;
+            padding: 0.5rem 1rem;
+            color: var(--secondary);
+        }
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary);
+            color: white;
+        }
+        .pagination .page-link:hover {
+            background-color: var(--light);
+            color: var(--primary);
+        }
+    </style>
+
+    <!-- Hero Section -->
+    <div class="hero-section py-5">
+        <div class="container position-relative">
+            <div class="row align-items-center">
+                <div class="col-lg-8 text-white">
+                    <h1 class="display-4 fw-bold mb-3">Uşaqlarınız üçün Möhtəşəm Tədbirlər 🌟</h1>
+                    <p class="lead mb-4">Maraqlı və təhsil verici fəaliyyətlərlə inkişafı dəstəkləyin!</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <div class="bg-blue bg-opacity-20 rounded-pill px-3 py-2"><i class="fas fa-star me-2"></i>Yüksək Keyfiyyət</div>
+                        <div class="bg-blue bg-opacity-20 rounded-pill px-3 py-2"><i class="fas fa-shield-alt me-2"></i>Təhlükəsizlik</div>
+                        <div class="bg-blue bg-opacity-20 rounded-pill px-3 py-2"><i class="fas fa-heart me-2"></i>Sevgi ilə</div>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-calendar-alt fa-7x text-white opacity-75 floating"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <!-- Filters -->
+        <div class="card mb-5">
+            <div class="card-body p-4">
+                <h4 class="fw-bold text-center mb-4"><i class="fas fa-filter me-2 text-primary"></i>Tədbir Axtarışı</h4>
+                <form method="get" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold"><i class="fas fa-tag me-1"></i>Kateqoriya</label>
+                        <div class="position-relative">
+                            {{ form.category }}
+                            <i class="fas fa-chevron-down position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold"><i class="fas fa-child me-1"></i>Yaş Qrupu</label>
+                        <div class="position-relative">
+                            {{ form.age_group }}
+                            <i class="fas fa-chevron-down position-absolute top-50 end-0 translate-middle-y me-3 text-muted"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold"><i class="fas fa-calendar-plus me-1"></i>Başlama</label>
+                        {{ form.date_from }}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold"><i class="fas fa-calendar-check me-1"></i>Bitmə</label>
+                        {{ form.date_to }}
+                    </div>
+                    <div class="col-12 text-center mt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search me-2"></i>Axtar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Quick Search -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-6">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control rounded-pill" placeholder="Tədbir axtar..." value="{{ search }}">
+                        <button class="btn btn-primary rounded-pill" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Events Grid -->
+        {% if page_obj %}
+        <div class="row g-4">
+            {% for event in page_obj %}
+            <div class="col-md-4">
+                <div class="card event-card h-100">
+                    <div class="position-relative">
+                        {% if event.image %}
+                        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                        <div class="card-img-top bg-primary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-calendar-alt fa-3x"></i>
+                        </div>
+                        {% endif %}
+                        <span class="badge position-absolute top-0 start-0 m-2" style="background: {{ event.category.color }};">{{ event.category.name }}</span>
+                        <span class="badge bg-light text-dark position-absolute top-0 end-0 m-2">{{ event.get_age_group_display }}</span>
+                        <span class="badge {% if event.is_full %}bg-danger{% else %}bg-success{% endif %} position-absolute bottom-0 end-0 m-2">
+                            {% if event.is_full %}Yer yoxdur{% else %}{{ event.available_spots }} yer{% endif %}
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="fw-bold mb-3">{{ event.title }}</h5>
+                        <p class="text-muted mb-4">{{ event.description|truncatewords:20 }}</p>
+                        <div class="small mb-4">
+                            <div><i class="fas fa-calendar me-2 text-primary"></i>{{ event.date|date:"d M Y" }}</div>
+                            <div><i class="fas fa-clock me-2 text-success"></i>{{ event.duration }} dəq</div>
+                            <div><i class="fas fa-map-marker-alt me-2 text-warning"></i>{{ event.location }}</div>
+                            <div><i class="fas fa-users me-2 text-info"></i>{{ event.booking_count }} / {{ event.max_participants }}</div>
+                        </div>
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="h5 fw-bold text-primary">{{ event.price }} ₼</span>
+                                <div class="text-end small">
+                                    <div class="progress mb-1">
+                                        <div class="progress-bar bg-info" style="width: {% widthratio event.booking_count event.max_participants 100 %}%;"></div>
+                                    </div>
+                                    {% widthratio event.booking_count event.max_participants 100 %}% dolu
+                                </div>
+                            </div>
+                            <a href="{% url 'events:event_detail' event.pk %}" class="btn btn-primary w-100">Ətraflı</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">İlk</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Əvvəlki</a></li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Növbəti</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Son</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="empty-state text-center">
+            <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+            <h4 class="fw-bold text-muted">Heç bir tədbir tapılmadı</h4>
+            <p class="text-muted mb-4">Axtarışınızı dəyişdirin və ya bütün tədbirləri görüntüləyin.</p>
+            <a href="?" class="btn btn-primary me-2"><i class="fas fa-sync me-2"></i>Bütün Tədbirlər</a>
+            <button onclick="document.querySelector('form').reset();" class="btn btn-outline-secondary"><i class="fas fa-eraser me-2"></i>Filtri Təmizlə</button>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="bg-light py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                            <h4 class="fw-bold text-primary">500+</h4>
+                            <p class="text-muted">Keçirilən Tədbir</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-users fa-3x text-success mb-3"></i>
+                            <h4 class="fw-bold text-success">2000+</h4>
+                            <p class="text-muted">Xoşbəxt Uşaq</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-star fa-3x text-warning mb-3"></i>
+                            <h4 class="fw-bold text-warning">4.9/5</h4>
+                            <p class="text-muted">Reytinq</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-award fa-3x text-info mb-3"></i>
+                            <h4 class="fw-bold text-info">10+</h4>
+                            <p class="text-muted">İxtisas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

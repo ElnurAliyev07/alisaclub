@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Doğum Günü Planlayıcısı - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Birthday Planner Section */
+    .birthday-planner-section {
+        background: linear-gradient(135deg, #ff8c42 0%, #f1c40f 50%, #e74c3c 100%);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .birthday-planner-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3C/g%3E%3C/svg%3E");
+        z-index: 1;
+    }
+
+    .birthday-planner-section .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .planner-form-modern {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .planner-form-modern .form-control {
+        border-radius: 10px;
+        border: 2px solid var(--primary-orange);
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .planner-form-modern .form-label {
+        font-family: 'Fredoka', cursive;
+        font-weight: 500;
+        color: var(--dark-navy);
+        margin-bottom: 0.5rem;
+    }
+
+    .planner-form-modern .btn-submit-modern {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+    .planner-form-modern .btn-submit-modern:hover {
+        background: var(--gradient-accent);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 140, 66, 0.3);
+    }
+
+    /* Floating Decorations */
+    .floating-decor-modern {
+        position: absolute;
+        font-size: 2.5rem;
+        color: rgba(255,255,255,0.2);
+        animation: float-around 10s ease-in-out infinite;
+    }
+
+    .floating-decor-modern:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+    .floating-decor-modern:nth-child(2) { top: 60%; left: 15%; animation-delay: 2s; }
+    .floating-decor-modern:nth-child(3) { top: 20%; right: 10%; animation-delay: 4s; }
+    .floating-decor-modern:nth-child(4) { bottom: 15%; right: 20%; animation-delay: 1s; }
+
+    @keyframes float-around {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        25% { transform: translateY(-20px) rotate(90deg); }
+        50% { transform: translateY(0px) rotate(180deg); }
+        75% { transform: translateY(20px) rotate(270deg); }
+    }
+
+    /* Responsive Optimizations */
+    @media (max-width: 768px) {
+        .birthday-planner-section {
+            padding: 60px 0;
+        }
+
+        .planner-form-modern {
+            padding: 2rem;
+        }
+
+        .section-title-modern {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .section-title-modern {
+            font-size: 2rem;
+        }
+
+        .planner-form-modern .form-control {
+            font-size: 0.9rem;
+        }
+
+        .planner-form-modern .btn-submit-modern {
+            font-size: 1rem;
+            padding: 0.7rem 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Birthday Planner Section -->
+<section class="birthday-planner-section">
+    <div class="floating-decor-modern">
+        <i class="fas fa-birthday-cake"></i>
+    </div>
+    <div class="floating-decor-modern">
+        <i class="fas fa-gift"></i>
+    </div>
+    <div class="floating-decor-modern">
+        <i class="fas fa-balloon"></i>
+    </div>
+    <div class="floating-decor-modern">
+        <i class="fas fa-star"></i>
+    </div>
+    
+    <div class="container">
+        <h2 class="section-title-modern text-white">Doğum Günü Planlayıcısı</h2>
+        <p class="lead text-center mb-5" style="font-size: 1.3rem; max-width: 600px; margin: 0 auto;">
+            Uşağınızın doğum gününü unudulmaz etmək üçün Alisa Club ilə planlaşdırın! Möcüzəli anlar yaratmaq bizim işimizdir!
+        </p>
+        <div class="planner-form-modern animate-on-scroll">
+            <form method="post" action="{% url 'birthday:planner' %}">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="mb-3">
+                    <label for="{{ form.child_name.id_for_label }}" class="form-label">{{ form.child_name.label }}</label>
+                    {{ form.child_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.child_age.id_for_label }}" class="form-label">{{ form.child_age.label }}</label>
+                    {{ form.child_age }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.event_date.id_for_label }}" class="form-label">{{ form.event_date.label }}</label>
+                    {{ form.event_date }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.guest_count.id_for_label }}" class="form-label">{{ form.guest_count.label }}</label>
+                    {{ form.guest_count }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.theme.id_for_label }}" class="form-label">{{ form.theme.label }}</label>
+                    {{ form.theme }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.notes.id_for_label }}" class="form-label">{{ form.notes.label }}</label>
+                    {{ form.notes }}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.contact_phone.id_for_label }}" class="form-label">{{ form.contact_phone.label }}</label>
+                    {{ form.contact_phone }}
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-submit-modern">
+                        <i class="fas fa-birthday-cake me-2"></i>Planlaşdırmanı Göndər
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation for date (future dates only)
+    const eventDateInput = document.getElementById('id_event_date');
+    if (eventDateInput) {
+        const today = new Date().toISOString().split('T')[0];
+        eventDateInput.setAttribute('min', today);
+        
+        eventDateInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const currentDate = new Date();
+            if (selectedDate < currentDate) {
+                alert('Zəhmət olmasa gələcək tarix seçin!');
+                this.value = '';
+            }
+        });
+    }
+
+    // Touch-friendly interactions for mobile
+    if ('ontouchstart' in window) {
+        const form = document.querySelector('.planner-form-modern');
+        if (form) {
+            form.addEventListener('touchstart', function() {
+                this.style.transform = 'translateY(-5px)';
+            });
+            form.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        }
+    }
+});
+</script>
+{% endblock %}

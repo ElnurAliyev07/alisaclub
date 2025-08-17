@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Səhifə Tapılmadı - Alisa Club{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <div class="mb-4">
+                <img src="/placeholder.svg?height=300&width=400" 
+                     alt="404 Error" class="img-fluid">
+            </div>
+            <h1 class="display-1 fw-bold text-primary">404</h1>
+            <h2 class="h4 mb-3">Səhifə Tapılmadı</h2>
+            <p class="text-muted mb-4">
+                Axtardığınız səhifə mövcud deyil və ya köçürülüb. 
+                Ana səhifəyə qayıdaraq axtarışınızı davam etdirə bilərsiniz.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'home' %}" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Ana Səhifə
+                </a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-envelope me-2"></i>Əlaqə
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

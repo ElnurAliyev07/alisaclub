@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ material.title }} - Alisa Club{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #f0f9ff 0%, #fff5e6 100%);
+        color: #2d3748;
+        font-family: 'Inter', sans-serif;
+    }
+    :root {
+        --primary: #ff6b6b;
+        --secondary: #718096;
+        --success: #38a169;
+        --warning: #ecc94b;
+        --info: #4299e1;
+        --light: #f7fafc;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .card {
+        border: none;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background-color: #e65b5b;
+        border-color: #e65b5b;
+    }
+    .btn-outline-primary {
+        border-color: var(--primary);
+        color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+    .btn-outline-warning {
+        border-color: var(--warning);
+        color: var(--warning);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-outline-warning:hover {
+        background-color: var(--warning);
+        color: white;
+    }
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+    }
+    .material-image img {
+        transition: transform 0.3s ease;
+    }
+    .material-image:hover img {
+        transform: scale(1.05);
+    }
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+    .sticky-top {
+        top: 2rem;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Material Image -->
+            <div class="card material-image mb-4">
+                {% if material.image %}
+                <img src="{{ material.image.url }}" class="img-fluid rounded-top" alt="{{ material.title }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                <div class="rounded-top bg-primary text-white d-flex align-items-center justify-content-center" style="height: 300px; background: linear-gradient(135deg, {{ material.category.color }}, #38a169);">
+                    <i class="{{ material.category.icon }} fa-4x"></i>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Material Details -->
+            <div class="d-flex justify-content-between align-items-start mb-3 flex-wrap gap-2">
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge" style="background-color: {{ material.category.color }};">
+                        <i class="{{ material.category.icon }} me-1"></i>{{ material.category.name }}
+                    </span>
+                    <span class="badge bg-info">{{ material.get_age_group_display }}</span>
+                    <span class="badge bg-{{ material.difficulty_level|yesno:'success,warning,danger' }}">
+                        {{ material.get_difficulty_level_display }}
+                    </span>
+                    {% if material.is_premium %}
+                    <span class="badge bg-warning">Premium</span>
+                    {% endif %}
+                </div>
+                {% if avg_rating %}
+                <div class="text-end">
+                    <div class="text-warning">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= avg_rating %}
+                        <i class="fas fa-star"></i>
+                        {% else %}
+                        <i class="far fa-star"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <small class="text-muted">{{ avg_rating|floatformat:1 }}/5</small>
+                </div>
+                {% endif %}
+            </div>
+
+            <h1 class="display-5 fw-bold mb-3">{{ material.title }}</h1>
+            <p class="lead text-muted mb-4">{{ material.description }}</p>
+
+            <!-- Material Content -->
+            {% if material.content %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-book text-primary me-2"></i>Məzmun</h5>
+                    <div class="bg-light p-3 rounded">{{ material.content|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Instructions -->
+            {% if material.instructions %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-list-ol text-primary me-2"></i>Təlimatlar</h5>
+                    <div class="bg-light p-3 rounded">{{ material.instructions|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Learning Objectives -->
+            {% if material.learning_objectives %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-bullseye text-success me-2"></i>Öyrənmə Məqsədləri</h5>
+                    <div class="bg-light p-3 rounded">{{ material.learning_objectives|linebreaks }}</div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Video -->
+            {% if material.video_url %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-play-circle text-danger me-2"></i>Video</h5>
+                    <div class="ratio ratio-16x9">
+                        <iframe src="{{ material.video_url }}" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Progress Update -->
+            {% if user.is_authenticated and user_progress %}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3"><i class="fas fa-chart-line text-info me-2"></i>Tərəqqiniz</h6>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-info" style="width: {{ user_progress.progress_percentage }}%"></div>
+                    </div>
+                    <form method="post" action="{% url 'kids_content:update_progress' material.pk %}" class="d-flex align-items-center gap-2">
+                        {% csrf_token %}
+                        <select name="status" class="form-select form-select-sm">
+                            <option value="not_started" {% if user_progress.status == 'not_started' %}selected{% endif %}>Başlanmayıb</option>
+                            <option value="in_progress" {% if user_progress.status == 'in_progress' %}selected{% endif %}>Davam edir</option>
+                            <option value="completed" {% if user_progress.status == 'completed' %}selected{% endif %}>Tamamlandı</option>
+                        </select>
+                        <input type="number" name="progress_percentage" value="{{ user_progress.progress_percentage }}" min="0" max="100" class="form-control form-control-sm" style="width: 80px;">
+                        <button type="submit" class="btn btn-sm btn-primary">Yenilə</button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Ratings -->
+            {% if ratings %}
+            <div class="mt-5">
+                <h4 class="fw-bold mb-4">Rəylər</h4>
+                {% for rating in ratings %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong>{{ rating.user.get_full_name|default:rating.user.username }}</strong>
+                            <div class="text-warning">
+                                {% for i in "12345" %}
+                                {% if forloop.counter <= rating.rating %}
+                                <i class="fas fa-star"></i>
+                                {% else %}
+                                <i class="far fa-star"></i>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% if rating.comment %}
+                        <p class="mb-0 text-muted">{{ rating.comment }}</p>
+                        {% endif %}
+                        <small class="text-muted">{{ rating.created_at|date:"d M Y" }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card sticky-top">
+                <div class="card-body p-4">
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 mb-4">
+                        {% if material.file %}
+                        <a href="{% url 'kids_content:download_material' material.pk %}" class="btn btn-primary">Yüklə</a>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'kids_content:toggle_favorite' material.pk %}" class="btn btn-outline-{% if is_favorite %}danger{% else %}primary{% endif %}">
+                            <i class="fas fa-heart me-2"></i>
+                            {% if is_favorite %}Sevimlilərdən Sil{% else %}Sevimlilərə Əlavə Et{% endif %}
+                        </a>
+                        {% if not user_rating %}
+                        <a href="{% url 'kids_content:add_rating' material.pk %}" class="btn btn-outline-warning">
+                            <i class="fas fa-star me-2"></i>Qiymət Ver
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <!-- Material Info -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold mb-3">Material Məlumatları</h6>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Növ:</span>
+                            <span class="fw-bold">{{ material.get_material_type_display }}</span>
+                        </div>
+                        {% if material.duration_minutes %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Müddət:</span>
+                            <span class="fw-bold">{{ material.duration_minutes }} dəq</span>
+                        </div>
+                        {% endif %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Baxış:</span>
+                            <span class="fw-bold">{{ material.view_count }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Yükləmə:</span>
+                            <span class="fw-bold">{{ material.download_count }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Related Materials -->
+                    {% if related_materials %}
+                    <div>
+                        <h6 class="fw-bold mb-3">Oxşar Materiallar</h6>
+                        {% for related in related_materials %}
+                        <div class="d-flex align-items-center mb-3">
+                            {% if related.image %}
+                            <img src="{{ related.image.url }}" alt="{{ related.title }}" class="rounded me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-primary rounded d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                <i class="fas fa-book text-white"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <h6 class="mb-0 small">
+                                    <a href="{% url 'kids_content:material_detail' related.pk %}" class="text-decoration-none">{{ related.title|truncatechars:30 }}</a>
+                                </h6>
+                                <small class="text-muted">{{ related.get_age_group_display }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

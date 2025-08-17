@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Rezervasiya Təsdiqləndi - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Success page styling */
+    .success-hero {
+        background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%);
+        color: white;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .success-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -30%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .success-icon {
+        font-size: 5rem;
+        color: white;
+        margin-bottom: 2rem;
+        animation: bounce 2s ease-in-out infinite;
+    }
+    
+    .success-card {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+        overflow: hidden;
+    }
+    
+    .success-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+    
+    .success-body {
+        padding: 3rem;
+        text-align: center;
+    }
+    
+    .success-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: #1f2937;
+        margin-bottom: 1rem;
+    }
+    
+    .success-message {
+        color: #6b7280;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+    
+    .booking-details {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 1px solid #bbf7d0;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #bbf7d0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #065f46;
+        display: flex;
+        align-items: center;
+    }
+    
+    .detail-label i {
+        margin-right: 8px;
+        width: 20px;
+    }
+    
+    .detail-value {
+        font-weight: 500;
+        color: #047857;
+    }
+    
+    .next-steps {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border-left: 5px solid #f59e0b;
+    }
+    
+    .steps-title {
+        font-weight: 700;
+        color: #92400e;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .steps-title i {
+        margin-right: 10px;
+    }
+    
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        color: #78350f;
+    }
+    
+    .step-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .step-number {
+        background: #f59e0b;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+    
+    .success-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn-action {
+        padding: 12px 24px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary-action {
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        color: white;
+        box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3);
+    }
+    
+    .btn-primary-action:hover {
+        background: linear-gradient(135deg, #be185d, #9d174d);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+    }
+    
+    .btn-secondary-action {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        color: #374151;
+        border: 2px solid #d1d5db;
+    }
+    
+    .btn-secondary-action:hover {
+        background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+        color: #1f2937;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+    
+    .btn-action i {
+        margin-right: 8px;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+    
+    @media (max-width: 768px) {
+        .success-hero {
+            padding: 80px 0 60px;
+        }
+        
+        .success-card {
+            margin-top: -60px;
+        }
+        
+        .success-body {
+            padding: 2rem;
+        }
+        
+        .success-title {
+            font-size: 2rem;
+        }
+        
+        .detail-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .success-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Success hero section -->
+<section class="success-hero">
+    <div class="container">
+        <div class="text-center">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">Təbriklər!</h1>
+            <p class="lead">Ad günü rezervasiyanız uğurla təsdiqləndi</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="success-card">
+                <div class="success-body">
+                    <h2 class="success-title">Rezervasiya Təsdiqləndi</h2>
+                    <p class="success-message">
+                        {{ booking.child.name }} üçün ad günü rezervasiyanız uğurla qeydə alındı. 
+                        Tezliklə sizinlə əlaqə saxlayacağıq və bütün detalları təsdiqləyəcəyik.
+                    </p>
+                    
+                    <div class="booking-details">
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-child"></i>Uşaq
+                            </div>
+                            <div class="detail-value">{{ booking.child.name }} {{ booking.child.surname }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-gift"></i>Paket
+                            </div>
+                            <div class="detail-value">{{ booking.package.name }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-calendar"></i>Tarix və Vaxt
+                            </div>
+                            <div class="detail-value">{{ booking.booking_date|date:"d F Y, H:i" }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-users"></i>Qonaq Sayı
+                            </div>
+                            <div class="detail-value">{{ booking.guest_count }} nəfər</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-phone"></i>Əlaqə
+                            </div>
+                            <div class="detail-value">{{ booking.contact_phone }}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">
+                                <i class="fas fa-money-bill"></i>Ümumi Məbləğ
+                            </div>
+                            <div class="detail-value">{{ booking.total_price }} ₼</div>
+                        </div>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h4 class="steps-title">
+                            <i class="fas fa-list-check"></i>Növbəti Addımlar
+                        </h4>
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div>24 saat ərzində sizinlə əlaqə saxlayacağıq</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div>Rezervasiya detallarını təsdiqləyəcəyik</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div>Ödəniş məlumatlarını göndərəcəyik</div>
+                        </div>
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div>Ad günü üçün hazırlıqlara başlayacağıq</div>
+                        </div>
+                    </div>
+                    
+                    <div class="success-actions">
+                        <a href="{% url 'membership:profile' %}" class="btn-action btn-primary-action">
+                            <i class="fas fa-user"></i>Profilimə Get
+                        </a>
+                        <a href="{% url 'core:home' %}" class="btn-action btn-secondary-action">
+                            <i class="fas fa-home"></i>Ana Səhifə
+                        </a>
+                        <a href="{% url 'birthday:package_list' %}" class="btn-action btn-secondary-action">
+                            <i class="fas fa-birthday-cake"></i>Digər Paketlər
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

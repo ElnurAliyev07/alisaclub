@@ -1,0 +1,745 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ad Günü Rezervasiyası - {{ package.name }} - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern booking form styling */
+    .booking-hero {
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 50%, #9d174d 100%);
+        color: white;
+        padding: 80px 0 60px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .booking-hero::before {
+        content: '';
+        position: absolute;
+        top: -30%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .package-summary {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(236, 72, 153, 0.15);
+        margin-top: -40px;
+        position: relative;
+        z-index: 10;
+        overflow: hidden;
+        border: 2px solid transparent;
+    }
+    
+    .package-summary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #ec4899, #be185d);
+    }
+    
+    .summary-body {
+        padding: 2rem;
+    }
+    
+    .package-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+    
+    .package-desc {
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .package-features-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-inline {
+        display: flex;
+        align-items: center;
+        color: #4b5563;
+        font-weight: 500;
+    }
+    
+    .feature-inline i {
+        color: #ec4899;
+        margin-right: 8px;
+        width: 20px;
+    }
+    
+    .package-price-large {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #10b981;
+        font-family: 'Playfair Display', serif;
+    }
+    
+    .booking-form-card {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-top: 2rem;
+    }
+    
+    .form-header {
+        background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-header i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .form-header h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .form-body {
+        padding: 2.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-label i {
+        color: #ec4899;
+        margin-right: 8px;
+        width: 20px;
+    }
+    
+    .form-control {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+    
+    .form-control:focus {
+        border-color: #ec4899;
+        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+        background: white;
+    }
+    
+    .form-select {
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f9fafb;
+    }
+    
+    .form-select:focus {
+        border-color: #ec4899;
+        box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+        background: white;
+    }
+    
+    .form-text {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    
+    .text-danger {
+        color: #ef4444 !important;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+    
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 2rem;
+        border-top: 1px solid #e5e7eb;
+        margin-top: 2rem;
+    }
+    
+    .btn-back {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+        color: #374151;
+        border: 2px solid #d1d5db;
+        padding: 12px 24px;
+        border-radius: 15px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back:hover {
+        background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+        color: #1f2937;
+        text-decoration: none;
+        transform: translateY(-2px);
+    }
+    
+    .btn-submit {
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3);
+    }
+    
+    .btn-submit:hover {
+        background: linear-gradient(135deg, #be185d, #9d174d);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+    }
+    
+    .btn-submit i {
+        margin-right: 8px;
+    }
+    
+    /* Added birthday discount notification */
+    .birthday-discount-alert {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #f59e0b;
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .birthday-discount-alert::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: -10px;
+        right: 20px;
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+    }
+    
+    .automated-suggestions {
+        background: #f0f9ff;
+        border: 2px solid #0ea5e9;
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .suggestion-item {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e0f2fe;
+        transition: all 0.3s ease;
+    }
+    
+    .suggestion-item:hover {
+        border-color: #0ea5e9;
+        transform: translateY(-2px);
+    }
+    
+    .suggestion-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(3deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .booking-hero {
+            padding: 60px 0 40px;
+        }
+        
+        .package-summary {
+            margin-top: -20px;
+        }
+        
+        .summary-body {
+            padding: 1.5rem;
+        }
+        
+        .package-title {
+            font-size: 1.5rem;
+        }
+        
+        .package-features-inline {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .form-body {
+            padding: 2rem;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .btn-back, .btn-submit {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern hero section -->
+<section class="booking-hero">
+    <div class="container">
+        <div class="hero-content text-center">
+            <h1 class="display-5 fw-bold mb-3">Ad Günü Rezervasiyası</h1>
+            <p class="lead">{{ package.name }} paketini rezervasiya edin</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Added birthday discount notification -->
+            {% if is_birthday_discount %}
+                <div class="birthday-discount-alert">
+                    <div class="discount-badge">{{ discount_percentage }}% ENDİRİM</div>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="fw-bold text-dark mb-2">
+                                🎉 Ad Günü Mübarək, {{ birthday_child.name }}!
+                            </h4>
+                            <p class="text-dark mb-0">
+                                Bu gün sizin xüsusi gününüzdür! {{ package.name }} paketi üçün 
+                                <strong>{{ discount_percentage }}% endirim</strong> qazandınız!
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <div class="text-decoration-line-through text-muted fs-5">{{ original_price }} ₼</div>
+                            <div class="fw-bold text-success fs-3">{{ discounted_price }} ₼</div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Added automated suggestions based on child's preferences -->
+            {% if automated_suggestions %}
+                <div class="automated-suggestions">
+                    <h5 class="fw-bold text-primary mb-3">
+                        <i class="fas fa-magic me-2"></i>{{ selected_child.name }} üçün Tövsiyələr
+                    </h5>
+                    {% for suggestion in automated_suggestions %}
+                        <div class="suggestion-item">
+                            <div class="suggestion-icon">
+                                <i class="{{ suggestion.icon }}"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark">{{ suggestion.title }}</div>
+                                <small class="text-muted">{{ suggestion.description }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Enhanced Package Summary -->
+            <div class="package-summary">
+                <div class="summary-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="package-title">{{ package.name }}</h2>
+                            <p class="package-desc">{{ package.description }}</p>
+                            <div class="package-features-inline">
+                                <div class="feature-inline">
+                                    <i class="fas fa-clock"></i>
+                                    {{ package.duration_hours }} saat
+                                </div>
+                                <div class="feature-inline">
+                                    <i class="fas fa-users"></i>
+                                    Maksimum {{ package.max_guests }} qonaq
+                                </div>
+                                <div class="feature-inline">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    Tort daxil
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            {% if is_birthday_discount %}
+                                <div class="text-decoration-line-through text-muted">{{ original_price }} ₼</div>
+                                <div class="package-price-large text-success">{{ discounted_price }} ₼</div>
+                            {% else %}
+                                <div class="package-price-large">{{ package.price }} ₼</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Booking Form -->
+            <div class="booking-form-card">
+                <div class="form-header">
+                    <i class="fas fa-calendar-plus"></i>
+                    <h5>Rezervasiya Formu</h5>
+                </div>
+                <div class="form-body">
+                    <form method="post" id="birthdayBookingForm">
+                        {% csrf_token %}
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.child.id_for_label }}" class="form-label">
+                                        <i class="fas fa-child"></i>Uşaq
+                                    </label>
+                                    {{ form.child }}
+                                    {% if form.child.errors %}
+                                        <div class="text-danger">{{ form.child.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.booking_date.id_for_label }}" class="form-label">
+                                        <i class="fas fa-calendar"></i>Tarix və Vaxt
+                                    </label>
+                                    {{ form.booking_date }}
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Ad günü rezervasiyaları üçün xüsusi endirimlər mövcuddur
+                                    </div>
+                                    {% if form.booking_date.errors %}
+                                        <div class="text-danger">{{ form.booking_date.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.guest_count.id_for_label }}" class="form-label">
+                                        <i class="fas fa-users"></i>Qonaq Sayı
+                                    </label>
+                                    {{ form.guest_count }}
+                                    <div class="form-text">Maksimum {{ package.max_guests }} qonaq</div>
+                                    {% if form.guest_count.errors %}
+                                        <div class="text-danger">{{ form.guest_count.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.contact_phone.id_for_label }}" class="form-label">
+                                        <i class="fas fa-phone"></i>Əlaqə Telefonu
+                                    </label>
+                                    {{ form.contact_phone }}
+                                    {% if form.contact_phone.errors %}
+                                        <div class="text-danger">{{ form.contact_phone.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Added automated reminder preferences -->
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-bell"></i>Xatırlatma Seçimləri
+                                    </label>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="sms_reminder" value="1" checked>
+                                                <label class="form-check-label">SMS xatırlatması</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="email_reminder" value="1" checked>
+                                                <label class="form-check-label">Email xatırlatması</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="whatsapp_reminder" value="1">
+                                                <label class="form-check-label">WhatsApp xatırlatması</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-text">
+                                        Rezervasiya tarixindən 1 gün əvvəl xatırlatma göndərəcəyik
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="{{ form.special_requests.id_for_label }}" class="form-label">
+                                        <i class="fas fa-comment"></i>Xüsusi İstəklər
+                                    </label>
+                                    {{ form.special_requests }}
+                                    <div class="form-text">Tort növü, dekorasiya və ya digər xüsusi istəklərinizi qeyd edin</div>
+                                    {% if form.special_requests.errors %}
+                                        <div class="text-danger">{{ form.special_requests.errors.0 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <a href="{% url 'birthday:package_list' %}" class="btn-back">
+                                <i class="fas fa-arrow-left me-2"></i>Geri
+                            </a>
+                            <button type="submit" class="btn-submit">
+                                <i class="fas fa-check"></i>
+                                {% if is_birthday_discount %}
+                                    {{ discounted_price }} ₼ - Rezervasiya Et
+                                {% else %}
+                                    Rezervasiya Et
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Added JavaScript for automated features -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('birthdayBookingForm');
+    const childSelect = form.querySelector('[name="child"]');
+    const dateInput = form.querySelector('[name="booking_date"]');
+    
+    // Check for birthday discounts when child or date changes
+    function checkBirthdayDiscount() {
+        const childId = childSelect.value;
+        const selectedDate = dateInput.value;
+        
+        if (childId && selectedDate) {
+            fetch('/birthday/check-discount/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+                body: JSON.stringify({
+                    child_id: childId,
+                    booking_date: selectedDate,
+                    package_id: {{ package.id }}
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.has_discount) {
+                    showDiscountNotification(data.discount_percentage, data.original_price, data.discounted_price);
+                    updateSubmitButton(data.discounted_price);
+                }
+            })
+            .catch(error => console.log('Discount check error:', error));
+        }
+    }
+    
+    childSelect.addEventListener('change', checkBirthdayDiscount);
+    dateInput.addEventListener('change', checkBirthdayDiscount);
+    
+    // Auto-save form data
+    const formInputs = form.querySelectorAll('input, select, textarea');
+    formInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const formData = new FormData(form);
+            localStorage.setItem('birthdayBookingForm', JSON.stringify(Object.fromEntries(formData)));
+        });
+    });
+    
+    // Restore form data on page load
+    const savedData = localStorage.getItem('birthdayBookingForm');
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        Object.keys(data).forEach(key => {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) {
+                if (input.type === 'checkbox') {
+                    input.checked = data[key] === '1';
+                } else {
+                    input.value = data[key];
+                }
+            }
+        });
+    }
+    
+    // Form submission with automation
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const submitBtn = form.querySelector('.btn-submit');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Rezervasiya edilir...';
+        submitBtn.disabled = true;
+        
+        const formData = new FormData(form);
+        
+        fetch(form.action || window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Clear saved form data
+                localStorage.removeItem('birthdayBookingForm');
+                
+                // Show success message
+                showSuccessMessage('Rezervasiya uğurla tamamlandı!');
+                
+                // Redirect to confirmation page
+                setTimeout(() => {
+                    window.location.href = data.redirect_url;
+                }, 2000);
+            } else {
+                showErrorMessage(data.message || 'Xəta baş verdi. Yenidən cəhd edin.');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorMessage('Xəta baş verdi. Yenidən cəhd edin.');
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+    });
+});
+
+function showDiscountNotification(percentage, originalPrice, discountedPrice) {
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success alert-dismissible fade show position-fixed';
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 350px;';
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="fas fa-gift fa-2x text-warning me-3"></i>
+            <div>
+                <h6 class="mb-1">🎉 Ad Günü Endirimi!</h6>
+                <p class="mb-0">${percentage}% endirim qazandınız! ${originalPrice} ₼ → ${discountedPrice} ₼</p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 8000);
+}
+
+function updateSubmitButton(price) {
+    const submitBtn = document.querySelector('.btn-submit');
+    submitBtn.innerHTML = `<i class="fas fa-check me-2"></i>${price} ₼ - Rezervasiya Et`;
+}
+
+function showSuccessMessage(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-success alert-dismissible fade show position-fixed';
+    alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alert);
+}
+
+function showErrorMessage(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+    alert.style.cssText = 'top: 20px; right: 20px; z-index: 9999;';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alert);
+}
+</script>
+{% endblock %}

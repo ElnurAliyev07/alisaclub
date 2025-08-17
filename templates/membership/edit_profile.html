@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profil Redaktə Et - Alisa Club{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-pink-100 via-pink-50 to-rose-100 flex items-center justify-center py-6">
+    <div class="container mx-auto px-4">
+        <div class="max-w-3xl mx-auto">
+            <!-- Başlıq hissəsi -->
+            <div class="text-center mb-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-rose-700 drop-shadow-md">
+                    <i class="fas fa-user-cog text-yellow-400 mr-2"></i>
+                    Profil Tənzimləmələri
+                    <i class="fas fa-tools text-yellow-400 ml-2"></i>
+                </h2>
+                <p class="text-rose-500 mt-2 text-sm md:text-base">Məlumatlarınızı yeniləyin və profili fərdiləşdirin ⚙️</p>
+            </div>
+
+            <div class="bg-white bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-xl">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-green-400 to-teal-400 rounded-t-2xl p-4 text-center">
+                    <div class="flex justify-center items-center gap-3">
+                        <div class="bg-white bg-opacity-20 backdrop-blur-md rounded-full p-2">
+                            <i class="fas fa-user-edit text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-lg">Profil Məlumatlarını Yenilə</h4>
+                            <p class="text-white text-opacity-75 text-sm">Şəxsi məlumatlarınızı idarə edin</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <form method="POST" enctype="multipart/form-data" class="space-y-6 needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Şəxsi məlumatlar bölümü -->
+                        <div class="bg-white bg-opacity-10 rounded-xl p-4 hover:shadow-lg transition-all duration-300">
+                            <h5 class="text-rose-700 font-bold text-lg mb-3">
+                                <i class="fas fa-user-circle mr-2"></i>Şəxsi Məlumatlar
+                            </h5>
+                            <div class="h-0.5 bg-gradient-to-r from-rose-400 to-transparent rounded mb-4 w-20"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-floating">
+                                    {{ user_form.first_name }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-user mr-2"></i>Ad
+                                    </label>
+                                </div>
+                                <div class="form-floating">
+                                    {{ user_form.last_name }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-signature mr-2"></i>Soyad
+                                    </label>
+                                </div>
+                                <div class="form-floating md:col-span-2">
+                                    {{ user_form.email }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-envelope mr-2"></i>Email ünvanı
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Əlaqə məlumatları bölümü -->
+                        <div class="bg-white bg-opacity-10 rounded-xl p-4 hover:shadow-lg transition-all duration-300">
+                            <h5 class="text-rose-700 font-bold text-lg mb-3">
+                                <i class="fas fa-phone mr-2"></i>Əlaqə Məlumatları
+                            </h5>
+                            <div class="h-0.5 bg-gradient-to-r from-yellow-300 to-transparent rounded mb-4 w-20"></div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="form-floating">
+                                    {{ profile_form.phone }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-mobile-alt mr-2"></i>Əsas telefon
+                                    </label>
+                                </div>
+                                <div class="form-floating">
+                                    {{ profile_form.emergency_phone }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>Təcili əlaqə telefonu
+                                    </label>
+                                </div>
+                                <div class="form-floating md:col-span-2">
+                                    {{ profile_form.address }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>Ev ünvanı
+                                    </label>
+                                </div>
+                                <div class="form-floating md:col-span-2">
+                                    {{ profile_form.emergency_contact }}
+                                    <label class="text-rose-600 font-semibold">
+                                        <i class="fas fa-user-friends mr-2"></i>Təcili halda əlaqə şəxsi
+                                    </label>
+                                    <p class="text-gray-500 text-xs mt-2">
+                                        <i class="fas fa-info-circle mr-1"></i>
+                                        Təcili hallarda bizim əlaqə saxlaya biləcəyimiz şəxs (ad, soyad, əlaqə)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Düymələr -->
+                        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                            <button type="submit" 
+                                    class="bg-gradient-to-r from-green-400 to-teal-400 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <i class="fas fa-check-circle mr-2"></i>Məlumatları Yadda Saxla
+                            </button>
+                            <a href="{% url 'membership:profile' %}" 
+                               class="bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+                                <i class="fas fa-arrow-left mr-2"></i>Geriyə Qayıt
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Dekorativ animasiyalı elementlər -->
+            <div class="fixed inset-0 pointer-events-none z-10">
+                <div class="absolute text-2xl opacity-50 animate-float" style="top: 12%; left: 6%;">🎯</div>
+                <div class="absolute text-2xl opacity-50 animate-float" style="top: 25%; right: 8%; animation-delay: -3s;">🏆</div>
+                <div class="absolute text-2xl opacity-50 animate-float" style="bottom: 35%; left: 10%; animation-delay: -6s;">📋</div>
+                <div class="absolute text-2xl opacity-50 animate-float" style="bottom: 20%; right: 12%; animation-delay: -9s;">✨</div>
+                <div class="absolute text-2xl opacity-50 animate-float" style="top: 65%; right: 5%; animation-delay: -1.5s;">🔧</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-10px) rotate(5deg); }
+        50% { transform: translateY(0) rotate(10deg); }
+        75% { transform: translateY(10px) rotate(5deg); }
+    }
+
+    .animate-float {
+        animation: float 10s ease-in-out infinite;
+    }
+
+    .form-control, .form-select {
+        border-radius: 0.75rem;
+        border: 2px solid #e5e7eb;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+        background: white;
+    }
+
+    .form-floating > label {
+        transition: all 0.3s ease;
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        color: #10b981;
+    }
+
+    .form-control:valid { border-color: #10b981; }
+    .form-control:invalid { border-color: #ef4444; }
+
+    @media (max-width: 768px) {
+        .text-4xl { font-size: 2rem; }
+        .text-2xl { font-size: 1.5rem; }
+        .container { padding-left: 1rem; padding-right: 1rem; }
+    }
+
+    @media (max-width: 576px) {
+        .text-4xl { font-size: 1.5rem; }
+        .text-2xl { font-size: 1.2rem; }
+        .container { padding-left: 0.5rem; padding-right: 0.5rem; }
+    }
+</style>
+
+<script src="https://cdn.tailwindcss.com"></script>
+{% endblock %}

@@ -1,0 +1,423 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Əlaqə - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        animation: float 20s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .contact-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: none;
+        overflow: hidden;
+    }
+    
+    .contact-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    }
+    
+    .contact-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .contact-icon::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+    }
+    
+    .contact-card:hover .contact-icon::before {
+        transform: translateX(100%);
+    }
+    
+    .whatsapp-btn {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+    }
+    
+    .whatsapp-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+        color: white;
+    }
+    
+    .telegram-btn {
+        background: linear-gradient(135deg, #0088cc, #005580);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(0, 136, 204, 0.3);
+    }
+    
+    .telegram-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0, 136, 204, 0.4);
+        color: white;
+    }
+    
+    .map-container {
+        height: 400px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        position: relative;
+    }
+    
+    .map-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        filter: grayscale(20%);
+        transition: filter 0.3s ease;
+    }
+    
+    .map-container:hover iframe {
+        filter: grayscale(0%);
+    }
+    
+    .contact-form {
+        background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    
+    .form-floating {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-control {
+        border: 2px solid #e1e8f0;
+        border-radius: 15px;
+        padding: 1rem 1.25rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255,255,255,0.9);
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        background: white;
+    }
+    
+    .btn-send {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-send:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .contact-hero {
+            padding: 60px 0;
+        }
+        
+        .contact-form {
+            padding: 2rem 1.5rem;
+        }
+        
+        .social-links {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .whatsapp-btn, .telegram-btn {
+            width: 100%;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Added modern hero section with gradient background and animations -->
+<section class="contact-hero">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-3 fw-bold mb-4" data-aos="fade-up">Bizimlə Əlaqə</h1>
+                <p class="lead mb-0" data-aos="fade-up" data-aos-delay="100">
+                    Suallarınız var? Bizə yazın və ya zəng edin, ən qısa zamanda cavab verəcəyik!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <!-- Enhanced contact information cards with hover effects -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="contact-card h-100 text-center p-4">
+                    <div class="contact-icon bg-primary">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Ünvanımız</h5>
+                    <p class="text-muted mb-0">
+                        Bakı şəhəri, Nəsimi rayonu<br>
+                        28 May küçəsi 123<br>
+                        <small class="text-primary">Mərkəzi Park yaxınlığında</small>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="contact-card h-100 text-center p-4">
+                    <div class="contact-icon bg-success">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Telefon</h5>
+                    <p class="text-muted mb-0">
+                        <a href="tel:+994501234567" class="text-decoration-none text-success fw-bold">
+                            +994 50 123 45 67
+                        </a><br>
+                        Hər gün 09:00-18:00<br>
+                        <small class="text-success">Həftə sonları da açığıq</small>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="contact-card h-100 text-center p-4">
+                    <div class="contact-icon bg-info">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h5 class="fw-bold mb-3">Email</h5>
+                    <p class="text-muted mb-0">
+                        <a href="mailto:info@alisaclub.az" class="text-decoration-none text-info fw-bold">
+                            info@alisaclub.az
+                        </a><br>
+                        24 saat ərzində cavab<br>
+                        <small class="text-info">Sürətli dəstək</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Added WhatsApp and Telegram integration buttons -->
+        <div class="text-center mb-5" data-aos="fade-up" data-aos-delay="400">
+            <h3 class="fw-bold mb-4">Tez Əlaqə</h3>
+            <div class="social-links">
+                <a href="https://wa.me/994501234567?text=Salam! Alisa Club haqqında məlumat almaq istəyirəm." 
+                   class="whatsapp-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp ilə yazın
+                </a>
+                <a href="https://t.me/alisaclub" class="telegram-btn" target="_blank">
+                    <i class="fab fa-telegram-plane"></i>
+                    Telegram kanalımız
+                </a>
+            </div>
+        </div>
+        
+        <div class="row g-5">
+            <!-- Enhanced contact form with modern styling -->
+            <div class="col-lg-6" data-aos="fade-right" data-aos-delay="500">
+                <div class="contact-form">
+                    <h3 class="fw-bold text-center mb-4">Mesaj Göndərin</h3>
+                    <form method="post" id="contactForm">
+                        {% csrf_token %}
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Adınız" required>
+                            <label for="name">Adınız *</label>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                            <label for="email">Email ünvanınız *</label>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Telefon">
+                            <label for="phone">Telefon nömrəniz</label>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <select class="form-control" id="subject" name="subject" required>
+                                <option value="">Mövzu seçin</option>
+                                <option value="event">Tədbir haqqında sual</option>
+                                <option value="membership">Üzvlük haqqında</option>
+                                <option value="birthday">Doğum günü təşkili</option>
+                                <option value="other">Digər</option>
+                            </select>
+                            <label for="subject">Mövzu *</label>
+                        </div>
+                        
+                        <div class="form-floating">
+                            <textarea class="form-control" id="message" name="message" 
+                                    placeholder="Mesajınız" style="height: 120px" required></textarea>
+                            <label for="message">Mesajınız *</label>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn-send">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Mesajı Göndər
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Added Google Maps integration -->
+            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="600">
+                <h3 class="fw-bold mb-4">Xəritədə Yerləşmə</h3>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.8267!2d49.8671!3d40.4093!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDI0JzMzLjUiTiA0OcKwNTInMDEuNiJF!5e0!3m2!1sen!2saz!4v1234567890"
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                
+                <div class="mt-4 p-4 bg-light rounded-3">
+                    <h5 class="fw-bold mb-3">
+                        <i class="fas fa-route text-primary me-2"></i>
+                        Necə gəlmək olar?
+                    </h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="fas fa-subway text-success me-2"></i>
+                            <strong>Metro:</strong> 28 May stansiyası (5 dəqiqə piyada)
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-bus text-info me-2"></i>
+                            <strong>Avtobus:</strong> 5, 18, 77 nömrəli marşrutlar
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-car text-warning me-2"></i>
+                            <strong>Avtomobil:</strong> Pulsuz parkinq mövcuddur
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Added AOS animation library and custom JavaScript -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script>
+    // Initialize AOS animations
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true
+    });
+    
+    // Form submission handling
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const submitBtn = this.querySelector('.btn-send');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Göndərilir...';
+        submitBtn.disabled = true;
+        
+        // Simulate form submission (replace with actual AJAX call)
+        setTimeout(() => {
+            // Show success message
+            const successAlert = document.createElement('div');
+            successAlert.className = 'alert alert-success alert-dismissible fade show mt-3';
+            successAlert.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                Mesajınız uğurla göndərildi! Tezliklə sizinlə əlaqə saxlayacağıq.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            this.appendChild(successAlert);
+            
+            // Reset form
+            this.reset();
+            
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }, 2000);
+    });
+</script>
+{% endblock %}

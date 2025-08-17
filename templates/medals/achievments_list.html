@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Nailiyyətlər Siyahısı - Alisa Club{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Nailiyyətlər Siyahısı</h1>
+            <p>Uşaqlarınızın əldə edə biləcəyi nailiyyətlər</p>
+        </div>
+    </section>
+
+    <!-- Type Filter -->
+    <section class="filters-section py-4">
+        <div class="container">
+            <form method="GET" class="row justify-content-center">
+                <div class="col-md-6">
+                    <select name="type" class="form-select">
+                        <option value="">Bütün Növlər</option>
+                        {% for type_value, type_label in "event_participation:Tədbir İştirakı,material_completion:Material Tamamlama,medal_collection:Medal Toplama,streak:Ardıcıllıq,special:Xüsusi" %}
+                            <option value="{{ type_value }}" {% if selected_type == type_value %}selected{% endif %}>{{ type_label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filtrlə</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Achievements List -->
+    <section class="achievements-list py-5">
+        <div class="container">
+            <div class="row g-4">
+                {% for achievement in achievements %}
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <i class="{{ achievement.icon }} fa-4x mb-3" style="color: {{ achievement.color }};"></i>
+                                <h5 class="card-title">{{ achievement.name }}</h5>
+                                <p class="card-text">{{ achievement.description|truncatewords:20 }}</p>
+                                <p><strong>Növ:</strong> {{ achievement.get_achievement_type_display }}</p>
+                                <p><strong>Xal Mükafatı:</strong> {{ achievement.points_reward }}</p>
+                                {% if achievement.required_count > 0 %}
+                                    <p><strong>Tələb Olunan Say:</strong> {{ achievement.required_count }}</p>
+                                {% endif %}
+                                {% if achievement.required_days > 0 %}
+                                    <p><strong>Tələb Olunan Gün:</strong> {{ achievement.required_days }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            <p>Heç bir nailiyyət tapılmadı.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

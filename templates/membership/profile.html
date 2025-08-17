@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profil - Alisa Club{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #f0f9ff 0%, #fff5e6 100%);
+        color: #2d3748;
+        font-family: 'Inter', sans-serif;
+    }
+    :root {
+        --primary: #ff6b6b;
+        --secondary: #718096;
+        --success: #38a169;
+        --light: #f7fafc;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .card {
+        border: none;
+        border-radius: 12px;
+        background: #ffffff;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background-color: #e65b5b;
+        border-color: #e65b5b;
+    }
+    .btn-outline-primary {
+        border-color: var(--primary);
+        color: var(--primary);
+        border-radius: 8px;
+        padding: 0.5rem 1.5rem;
+        font-weight: 500;
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--primary);
+        color: white;
+    }
+    .badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    .rounded-circle {
+        object-fit: cover;
+        border: 2px solid #e2e8f0;
+    }
+    .header-icon {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+    }
+    .child-card {
+        border-left: 4px solid var(--primary);
+    }
+    .empty-state {
+        background: #f7fafc;
+        border-radius: 12px;
+        padding: 2rem;
+    }
+</style>
+
+<div class="py-5">
+    <div class="container">
+        <!-- Başlıq -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">
+                🌈 Salam, {{ user.get_full_name|default:user.username }}! 🌈
+            </h1>
+            <p class="text-secondary fs-5">Alisa Club ailəsinin sevimli üzvüsən!</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Sol tərəf -->
+            <div class="col-lg-4">
+                <!-- Profil kartı -->
+                <div class="card mb-4 text-center">
+                    <div class="card-body p-4">
+                        <div class="position-relative mb-4 mx-auto" style="width: 120px; height: 120px;">
+                            <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center w-100 h-100 text-white fs-1">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2">
+                                <i class="fas fa-check text-white" style="font-size: 0.9rem;"></i>
+                            </div>
+                        </div>
+                        <h5 class="card-title fw-bold mb-2">{{ user.get_full_name|default:user.username }}</h5>
+                        <p class="text-secondary mb-4">{{ user.email }}</p>
+                        <a href="{% url 'membership:edit_profile' %}" class="btn btn-primary w-100">
+                            <i class="fas fa-edit header-icon"></i>Profili Redaktə Et
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Üzvlük məlumatları -->
+                <div class="card">
+                    <div class="card-body p-4">
+                        <h6 class="card-title fw-bold mb-3">
+                            <i class="fas fa-crown header-icon"></i>Üzvlük Məlumatları
+                        </h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                Növ:
+                                <span class="badge bg-success">{{ member_profile.membership.get_membership_type_display }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                Status:
+                                <span class="badge bg-primary">{{ member_profile.membership.get_status_display }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                Başlama:
+                                <span>{{ member_profile.membership.start_date|date:"d.m.Y" }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sağ tərəf -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+                        <h5 class="mb-0 fw-bold"><i class="fas fa-child header-icon"></i>Mənim Balacalarım</h5>
+                        <a href="{% url 'membership:add_child' %}" class="btn btn-light btn-sm">
+                            <i class="fas fa-plus header-icon"></i>Yeni Uşaq Əlavə Et
+                        </a>
+                    </div>
+                    <div class="card-body p-4">
+                        {% if children %}
+                        <div class="row g-3">
+                            {% for child in children %}
+                            <div class="col-md-6">
+                                <div class="card child-card h-100">
+                                    <div class="card-body p-3">
+                                        <div class="d-flex align-items-center mb-3">
+                                            {% if child.photo %}
+                                            <img src="{{ child.photo.url }}" alt="{{ child.name }}" class="rounded-circle me-3" width="64" height="64">
+                                            {% else %}
+                                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3" style="width: 64px; height: 64px;">
+                                                <i class="fas fa-child fs-3"></i>
+                                            </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">{{ child.name }} {{ child.surname }}</h6>
+                                                <small class="text-secondary">{{ child.age }} yaş | {{ child.get_gender_display }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'membership:child_detail' child.pk %}" class="btn btn-primary btn-sm flex-fill">Detal</a>
+                                            <a href="{% url 'membership:edit_child' child.pk %}" class="btn btn-outline-primary btn-sm flex-fill">Redaktə</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="empty-state text-center">
+                            <i class="fas fa-child fa-3x text-secondary mb-3"></i>
+                            <h5 class="text-secondary fw-bold">Hələ uşaq əlavə etməmisiniz</h5>
+                            <p class="text-secondary mb-4">İlk balacağınızı əlavə etmək üçün yuxarıdakı düyməni basın!</p>
+                            <a href="{% url 'membership:add_child' %}" class="btn btn-primary">
+                                <i class="fas fa-plus header-icon"></i>İlk Uşağı Əlavə Et
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

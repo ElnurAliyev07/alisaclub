@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Liderlik Cədvəli - Alisa Club{% endblock %}
+
+{% block content %}
+
+    <!-- Hero Section -->
+    <section class="hero-section bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">Liderlik Cədvəli</h1>
+            <p>{{ period|capfirst }} dövrü: {{ start_date|date:"d M Y" }} - {{ end_date|date:"d M Y" }}</p>
+        </div>
+    </section>
+
+    <!-- Period Filter -->
+    <section class="filters-section py-4">
+        <div class="container text-center">
+            <a href="{% url 'medals:leaderboard' %}?period=weekly" class="btn btn-outline-primary mx-1 {% if period == 'weekly' %}active{% endif %}">Həftəlik</a>
+            <a href="{% url 'medals:leaderboard' %}?period=monthly" class="btn btn-outline-primary mx-1 {% if period == 'monthly' %}active{% endif %}">Aylıq</a>
+            <a href="{% url 'medals:leaderboard' %}?period=yearly" class="btn btn-outline-primary mx-1 {% if period == 'yearly' %}active{% endif %}">İllik</a>
+            <a href="{% url 'medals:leaderboard' %}?period=all_time" class="btn btn-outline-primary mx-1 {% if period == 'all_time' %}active{% endif %}">Bütün Vaxtlar</a>
+        </div>
+    </section>
+
+    <!-- Leaderboard Table -->
+    <section class="leaderboard py-5">
+        <div class="container">
+            {% if leaders %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Rəqəm</th>
+                            <th>Uşaq</th>
+                            <th>Xal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leader in leaders %}
+                            <tr>
+                                <td>#{{ leader.rank|default:forloop.counter }}</td>
+                                <td>{{ leader.child.name }}</td>
+                                <td>{{ leader.points }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info text-center">
+                    <p>Heç bir məlumat yoxdur.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+{% endblock %}

@@ -1,0 +1,640 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Uşaq Məzmunu - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Modern kids content page styling */
+    .kids-hero {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+        color: white;
+        padding: 100px 0 80px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .kids-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 8s ease-in-out infinite;
+    }
+    
+    .kids-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -10%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: float 6s ease-in-out infinite reverse;
+    }
+    
+    .featured-section {
+        background: linear-gradient(135deg, #fef3c7 0%, #ffffff 100%);
+        border-radius: 25px;
+        padding: 2.5rem;
+        margin-top: -50px;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    
+    .featured-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .featured-title i {
+        color: #f59e0b;
+        margin-right: 10px;
+    }
+    
+    .featured-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid transparent;
+        height: 100%;
+        position: relative;
+    }
+    
+    .featured-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        z-index: 1;
+    }
+    
+    .featured-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .featured-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2);
+        border-color: #f59e0b;
+    }
+    
+    .filter-section {
+        background: white;
+        border-radius: 25px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        margin-bottom: 3rem;
+        border: 1px solid rgba(16, 185, 129, 0.1);
+    }
+    
+    .filter-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .filter-title i {
+        color: #10b981;
+        margin-right: 10px;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 15px;
+        border: 2px solid #e5e7eb;
+        padding: 12px 18px;
+        transition: all 0.3s ease;
+        background: #f8fafc;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        border-color: #10b981;
+        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
+        background: white;
+        transform: translateY(-2px);
+    }
+    
+    .form-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+    }
+    
+    .form-label i {
+        color: #10b981;
+        margin-right: 8px;
+        width: 16px;
+    }
+    
+    .btn-filter {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+        padding: 12px 25px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-filter:hover {
+        background: linear-gradient(135deg, #059669, #047857);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .search-section {
+        margin-bottom: 3rem;
+    }
+    
+    .search-box {
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .search-input {
+        border: none;
+        padding: 18px 25px;
+        font-size: 1.1rem;
+        background: transparent;
+    }
+    
+    .search-input:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    
+    .search-btn {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        border: none;
+        padding: 18px 25px;
+        color: white;
+        transition: all 0.3s ease;
+    }
+    
+    .search-btn:hover {
+        background: linear-gradient(135deg, #d97706, #b45309);
+    }
+    
+    .material-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 2px solid transparent;
+        height: 100%;
+        position: relative;
+    }
+    
+    .material-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #10b981, #34d399);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+        z-index: 1;
+    }
+    
+    .material-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .material-card:hover {
+        transform: translateY(-15px) scale(1.02);
+        box-shadow: 0 25px 60px rgba(16, 185, 129, 0.15);
+        border-color: #10b981;
+    }
+    
+    .material-image {
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .material-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .material-card:hover .material-image img {
+        transform: scale(1.1);
+    }
+    
+    .material-badges {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 2;
+    }
+    
+    .material-badge {
+        background: rgba(255,255,255,0.95);
+        color: #10b981;
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .premium-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        padding: 8px 12px;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        z-index: 2;
+    }
+    
+    .material-content {
+        padding: 1.5rem;
+    }
+    
+    .material-title {
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        line-height: 1.4;
+    }
+    
+    .material-description {
+        color: #6b7280;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+    
+    .material-stats {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background: #f8fafc;
+        border-radius: 10px;
+    }
+    
+    .stat-item {
+        display: flex;
+        align-items: center;
+        font-size: 0.85rem;
+        color: #6b7280;
+    }
+    
+    .stat-item i {
+        color: #10b981;
+        margin-right: 5px;
+        width: 14px;
+    }
+    
+    .material-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .difficulty-badge {
+        padding: 6px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .btn-material {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border: none;
+        padding: 8px 20px;
+        border-radius: 15px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-material:hover {
+        background: linear-gradient(135deg, #059669, #047857);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+    }
+    
+    .no-materials {
+        text-align: center;
+        padding: 5rem 2rem;
+        background: white;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+    
+    .no-materials i {
+        font-size: 4rem;
+        color: #d1d5db;
+        margin-bottom: 1.5rem;
+    }
+    
+    .pagination {
+        margin-top: 3rem;
+    }
+    
+    .page-link {
+        border-radius: 10px;
+        margin: 0 5px;
+        border: 2px solid #e5e7eb;
+        color: #6b7280;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover, .page-item.active .page-link {
+        background: linear-gradient(135deg, #10b981, #059669);
+        border-color: #10b981;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    
+    @media (max-width: 768px) {
+        .kids-hero {
+            padding: 80px 0 60px;
+        }
+        
+        .featured-section {
+            margin-top: -30px;
+            padding: 2rem;
+        }
+        
+        .filter-section {
+            padding: 2rem;
+        }
+        
+        .material-content {
+            padding: 1.25rem;
+        }
+        
+        .material-stats {
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Modern hero section -->
+<section class="kids-hero">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-4 fw-bold mb-3">Uşaq Məzmunu</h1>
+            <p class="lead mb-0">Yaş qrupuna uyğun təhsil materialları və əyləncəli fəaliyyətlər</p>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Enhanced Featured Materials -->
+    {% if featured_materials %}
+        <div class="featured-section">
+            <h3 class="featured-title">
+                <i class="fas fa-star"></i>Seçilmiş Materiallar
+            </h3>
+            <div class="row g-3">
+                {% for material in featured_materials %}
+                    <div class="col-lg-2 col-md-4 col-6">
+                        <div class="featured-card">
+                            {% if material.image %}
+                                <img src="{{ material.image.url }}" class="card-img-top" alt="{{ material.title }}" style="height: 120px; object-fit: cover;">
+                            {% else %}
+                                <div class="card-img-top d-flex align-items-center justify-content-center" style="height: 120px; background: linear-gradient(45deg, #f59e0b, #d97706);">
+                                    <i class="fas fa-book text-white fa-2x"></i>
+                                </div>
+                            {% endif %}
+                            <div class="card-body p-2">
+                                <h6 class="card-title small mb-2">{{ material.title|truncatechars:25 }}</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="badge bg-info">{{ material.get_age_group_display }}</small>
+                                    <a href="{% url 'kids_content:material_detail' material.pk %}" class="btn btn-sm btn-outline-primary">Bax</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Enhanced Filters -->
+    <div class="filter-section">
+        <h5 class="filter-title">
+            <i class="fas fa-filter"></i>Filtrləmə və Axtarış
+        </h5>
+        <form method="get" class="row g-3">
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label">
+                    <i class="fas fa-tag"></i>Kateqoriya
+                </label>
+                {{ form.category }}
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label">
+                    <i class="fas fa-cube"></i>Növ
+                </label>
+                {{ form.material_type }}
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label">
+                    <i class="fas fa-child"></i>Yaş qrupu
+                </label>
+                {{ form.age_group }}
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label">
+                    <i class="fas fa-signal"></i>Çətinlik
+                </label>
+                {{ form.difficulty_level }}
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label class="form-label">
+                    <i class="fas fa-sort"></i>Sıralama
+                </label>
+                <select name="sort" class="form-select">
+                    <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>Ən yeni</option>
+                    <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>Populyar</option>
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Ən yaxşı qiymət</option>
+                    <option value="title" {% if sort_by == 'title' %}selected{% endif %}>Əlifba sırası</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-filter text-white w-100">
+                    <i class="fas fa-search me-2"></i>Filtrləmə
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Enhanced Search -->
+    <div class="search-section">
+        <form method="get">
+            <div class="search-box input-group">
+                <input type="text" name="search" class="form-control search-input" 
+                       placeholder="Material axtarın..." value="{{ search }}">
+                <button class="search-btn" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Enhanced Materials Grid -->
+    {% if page_obj %}
+        <div class="row g-4 mb-5">
+            {% for material in page_obj %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="material-card">
+                        <div class="material-image">
+                            {% if material.image %}
+                                <img src="{{ material.image.url }}" alt="{{ material.title }}">
+                            {% else %}
+                                <div class="d-flex align-items-center justify-content-center h-100" 
+                                     style="background: linear-gradient(135deg, {{ material.category.color|default:'#10b981' }}, #34d399);">
+                                    <i class="{{ material.category.icon|default:'fas fa-book' }} fa-3x text-white"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="material-badges">
+                                <span class="material-badge">
+                                    {{ material.category.name }}
+                                </span>
+                                <span class="material-badge">
+                                    {{ material.get_age_group_display }}
+                                </span>
+                            </div>
+                            
+                            {% if material.is_premium %}
+                                <div class="premium-badge">
+                                    <i class="fas fa-crown me-1"></i>Premium
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="material-content">
+                            <h6 class="material-title">{{ material.title }}</h6>
+                            <p class="material-description">{{ material.description|truncatewords:12 }}</p>
+                            
+                            <div class="material-stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-eye"></i>
+                                    {{ material.view_count }}
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-download"></i>
+                                    {{ material.download_count }}
+                                </div>
+                                {% if material.duration_minutes %}
+                                    <div class="stat-item">
+                                        <i class="fas fa-clock"></i>
+                                        {{ material.duration_minutes }}dəq
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="material-footer">
+                                <span class="difficulty-badge bg-{% if material.difficulty_level == 'easy' %}success{% elif material.difficulty_level == 'medium' %}warning{% else %}danger{% endif %} text-white">
+                                    {{ material.get_difficulty_level_display }}
+                                </span>
+                                <a href="{% url 'kids_content:material_detail' material.pk %}" class="btn btn-material text-white">
+                                    <i class="fas fa-eye me-1"></i>Ətraflı
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Enhanced Pagination -->
+        {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="fas fa-chevron-left me-1"></i>Əvvəlki
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                Növbəti<i class="fas fa-chevron-right ms-1"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="no-materials">
+            <i class="fas fa-search"></i>
+            <h4 class="text-muted mb-3">Material tapılmadı</h4>
+            <p class="text-muted mb-4">Axtarış kriteriyalarınızı dəyişdirərək yenidən cəhd edin.</p>
+            <a href="{% url 'kids_content:material_list' %}" class="btn btn-primary">
+                <i class="fas fa-refresh me-2"></i>Bütün Materialları Gör
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

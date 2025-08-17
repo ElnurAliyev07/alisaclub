@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Xəbərlərə Abunə - Alisa Club{% endblock %}
+
+{% block extra_css %}
+<style>
+    .subscribe-section-modern {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .subscribe-section-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='10'/%3E%3C/g%3E%3C/svg%3E");
+        z-index: 1;
+    }
+
+    .subscribe-section-modern .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .subscribe-form-modern {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .subscribe-input-modern {
+        border-radius: 50px;
+        border: 2px solid var(--primary-orange);
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        width: 100%;
+    }
+
+    .subscribe-btn-modern {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 0.8rem 2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .subscribe-btn-modern:hover {
+        background: var(--gradient-accent);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 140, 66, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        .subscribe-section-modern {
+            padding: 60px 0;
+        }
+
+        .section-title-modern {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .section-title-modern {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="subscribe-section-modern">
+    <div class="container">
+        <h2 class="section-title-modern text-white">Xəbərlərimizə Abunə Olun</h2>
+        <p class="lead text-center mb-5" style="font-size: 1.3rem; max-width: 600px; margin: 0 auto;">
+            Alisa Club-ın ən son xəbərləri, tədbirləri və xüsusi təklifləri barədə məlumat almaq üçün abunə olun!
+        </p>
+        <form class="subscribe-form-modern" method="post" action="{% url 'membership:subscribe' %}">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="input-group mb-3">
+                {{ form.email }}
+                <button class="btn subscribe-btn-modern" type="submit">
+                    <i class="fas fa-envelope me-2"></i>Abunə Ol
+                </button>
+            </div>
+            {% if form.email.errors %}
+                <div class="text-danger text-center">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</section>
+{% endblock %}

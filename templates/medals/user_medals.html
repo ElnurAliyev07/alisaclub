@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Medallarım - Alisa Club{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary mb-3">
+            <i class="fas fa-medal me-3"></i>Medallarım
+        </h1>
+        <p class="lead text-muted">Uşağınızın qazandığı medallər və nailiyyətlər</p>
+    </div>
+    
+    <!-- Child Selection -->
+    {% if children.count > 1 %}
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <h6 class="mb-3">Uşaq seçin:</h6>
+                        <div class="btn-group" role="group">
+                            {% for child in children %}
+                                <a href="?child={{ child.id }}" 
+                                   class="btn {% if child == selected_child %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                                    {{ child.name }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Passport Summary -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-lg" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <div class="card-body text-white p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if selected_child.photo %}
+                                <img src="{{ selected_child.photo.url }}" alt="{{ selected_child.name }}" 
+                                     class="rounded-circle border border-white border-3" width="100" height="100">
+                            {% else %}
+                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center border border-3" 
+                                     style="width: 100px; height: 100px;">
+                                    <i class="fas fa-child fa-3x text-primary"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="fw-bold mb-1">{{ selected_child.name }} {{ selected_child.surname }}</h3>
+                            <p class="mb-2">Pasport #{{ passport.passport_number }}</p>
+                            <div class="d-flex align-items-center mb-2">
+                                <span class="me-2">Səviyyə {{ passport.level }}</span>
+                                <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" 
+                                         style="width: {{ passport.experience_points|floatformat:0 }}%"></div>
+                                </div>
+                                <small>{{ passport.next_level_points }} xal qalıb</small>
+                            </div>
+                            <p class="mb-0">
+                                <i class="fas fa-star me-1"></i>{{ stats.total_points }} xal
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <a href="{% url 'medals:virtual_passport' selected_child.id %}" class="btn btn-light btn-lg">
+                                <i class="fas fa-passport me-2"></i>Pasport
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-medal fa-2x text-warning mb-2"></i>
+                    <h4 class="fw-bold">{{ stats.total_medals }}</h4>
+                    <small class="text-muted">Ümumi Medal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-trophy fa-2x text-warning mb-2"></i>
+                    <h4 class="fw-bold">{{ stats.gold_medals }}</h4>
+                    <small class="text-muted">Qızıl Medal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-star fa-2x text-primary mb-2"></i>
+                    <h4 class="fw-bold">{{ stats.total_points }}</h4>
+                    <small class="text-muted">Ümumi Xal</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body">
+                    <i class="fas fa-level-up-alt fa-2x text-success mb-2"></i>
+                    <h4 class="fw-bold">{{ stats.level }}</h4>
+                    <small class="text-muted">Səviyyə</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Check for New Medals -->
+    <div class="text-center mb-4">
+        <a href="{% url 'medals:check_eligibility' %}" class="btn btn-success btn-lg">
+            <i class="fas fa-search me-2"></i>Yeni Medalları Yoxla
+        </a>
+    </div>
+    
+    <!-- Medals by Category -->
+    {% if medals_by_category %}
+        {% for category, category_medals in medals_by_category.items %}
+            <div class="mb-5">
+                <h3 class="mb-4">
+                    <i class="fas fa-folder-open text-primary me-2"></i>{{ category }}
+                    <span class="badge bg-primary ms-2">{{ category_medals|length }}</span>
+                </h3>
+                
+                <div class="row g-3">
+                    {% for user_medal in category_medals %}
+                        <div class="col-lg-3 col-md-4 col-sm-6">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        {% if user_medal.medal.image %}
+                                            <img src="{{ user_medal.medal.image.url }}" alt="{{ user_medal.medal.name }}" 
+                                                 class="img-fluid" style="max-height: 80px;">
+                                        {% else %}
+                                            <i class="{{ user_medal.medal.icon }} fa-4x {{ user_medal.medal.color_class }}"></i>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <h6 class="fw-bold">{{ user_medal.medal.name }}</h6>
+                                    <p class="small text-muted">{{ user_medal.medal.description|truncatewords:10 }}</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge" style="background-color: {{ user_medal.medal.rarity_color }};">
+                                            {{ user_medal.medal.get_rarity_display }}
+                                        </span>
+                                        <small class="text-muted">{{ user_medal.earned_date|date:"d M Y" }}</small>
+                                    </div>
+                                    
+                                    <div class="mt-2">
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-star me-1"></i>{{ user_medal.medal.points }} xal
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-medal fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">Hələ medal qazanmamısınız</h4>
+            <p class="text-muted">Tədbirlərə qatılın və fəaliyyətləri tamamlayın ki, medal qazanasınız!</p>
+            <div class="mt-3">
+                <a href="{% url 'events:event_list' %}" class="btn btn-primary me-2">Tədbirlərə Bax</a>
+                <a href="{% url 'kids_content:material_list' %}" class="btn btn-outline-primary">Materialları Kəşf Et</a>
+            </div>
+        </div>
+    {% endif %}
+    
+    <!-- Recent Achievements -->
+    {% if achievements %}
+        <div class="mt-5">
+            <h3 class="mb-4">
+                <i class="fas fa-trophy text-warning me-2"></i>Son Nailiyyətlər
+            </h3>
+            
+            <div class="row g-3">
+                {% for achievement in achievements|slice:":6" %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="{{ achievement.achievement.icon }} fa-2x" 
+                                       style="color: {{ achievement.achievement.color }};"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">{{ achievement.achievement.name }}</h6>
+                                    <small class="text-muted">{{ achievement.earned_date|date:"d M Y" }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,899 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Alisa Club - Uşaq İnkişaf Mərkəzi{% endblock %}
+
+{% block extra_css %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
+    
+    html, body {
+        overflow-x: hidden;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --gradient-primary: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+        --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --white: #ffffff;
+        --light-gray: #f8f9fa;
+        --medium-gray: #6c757d;
+        --dark-navy: #2c3e50;
+        --primary-orange: #ff8c42;
+        --bright-pink: #ff6b9d;
+        --bright-blue: #4ecdc4;
+        --bright-yellow: #ffe66d;
+        --bright-purple: #a8e6cf;
+        --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        --shadow-hover: 0 25px 50px rgba(0,0,0,0.15);
+        --border-radius: 20px;
+    }
+
+    /* Hero Section - Keep colorful */
+    .hero-section-modern {
+        background: var(--gradient-primary);
+        color: white;
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 100px 0;
+        animation: gradientShift 8s ease-in-out infinite;
+    }
+
+    @keyframes gradientShift {
+        0%, 100% { background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3); }
+        25% { background: linear-gradient(135deg, #feca57, #48dbfb, #ff9ff3, #ff6b6b); }
+        50% { background: linear-gradient(135deg, #48dbfb, #ff9ff3, #ff6b6b, #feca57); }
+        75% { background: linear-gradient(135deg, #ff9ff3, #ff6b6b, #feca57, #48dbfb); }
+    }
+
+    .hero-section-modern::before {
+        content: '🌟 ⭐ 🎈 🎨 🎪 🎭 🎯 🎲';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        font-size: 2rem;
+        opacity: 0.1;
+        animation: floatingEmojis 20s linear infinite;
+        z-index: 1;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    @keyframes floatingEmojis {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .hero-content-modern {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title-modern {
+        font-family: 'Fredoka', cursive;
+        font-weight: 700;
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+        animation: bounceIn 1.2s ease-out;
+    }
+
+    .hero-subtitle-modern {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+        animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .btn-hero-modern {
+        background: linear-gradient(45deg, #ff6b9d, #feca57);
+        border: none;
+        padding: 18px 45px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        border-radius: 50px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        display: inline-flex;
+        align-items: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .btn-hero-modern:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: var(--shadow-hover);
+        background: linear-gradient(45deg, #feca57, #ff6b9d);
+    }
+
+    .hero-image-modern {
+        max-width: 100%;
+        border-radius: 25px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        animation: float-gentle 6s ease-in-out infinite;
+        border: 5px solid rgba(255,255,255,0.3);
+    }
+
+    /* Events Section - Clean White */
+    .events-section {
+        padding: 100px 0;
+        background: var(--white);
+    }
+
+    /* Services Section - Light Gray Background */
+    .services-section-modern {
+        padding: 100px 0;
+        background: var(--light-gray);
+        position: relative;
+    }
+
+    .service-card-modern {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        padding: 2.5rem;
+        box-shadow: var(--shadow);
+        transition: all 0.4s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        position: relative;
+        border: 2px solid transparent;
+    }
+
+    .service-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--bright-pink);
+    }
+
+    .service-icon-modern {
+        width: 80px;
+        height: 80px;
+        background: var(--gradient-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: white;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .service-title-modern {
+        font-family: 'Fredoka', cursive;
+        font-size: 1.6rem;
+        color: var(--dark-navy);
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .service-description-modern {
+        font-family: 'Nunito', sans-serif;
+        color: var(--medium-gray);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        flex-grow: 1;
+        margin-bottom: 2rem;
+    }
+
+    /* Stats Section - Dark Navy */
+    .stats-section-modern {
+        background: var(--dark-navy);
+        color: white;
+        padding: 80px 0;
+        position: relative;
+    }
+
+    .stat-item-modern {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .stat-number-modern {
+        font-family: 'Fredoka', cursive;
+        font-size: 4rem;
+        font-weight: 700;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+        animation: countUp 2s ease-out;
+    }
+
+    .stat-label-modern {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 600;
+    }
+
+    /* Membership Section - White Background with Image */
+    .membership-section-modern {
+        padding: 100px 0;
+        background: var(--white);
+        text-align: center;
+        position: relative;
+    }
+
+    .membership-card-modern {
+        background: var(--light-gray);
+        border-radius: 30px;
+        padding: 3rem;
+        box-shadow: var(--shadow);
+        transition: all 0.5s ease;
+        max-width: 100%;
+        margin: 0 auto;
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .membership-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--bright-pink);
+    }
+
+    .membership-image-modern {
+        max-width: 100%;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2rem;
+        margin-top:50px;
+        animation: float-gentle 6s ease-in-out infinite;
+    }
+
+    .membership-title-modern {
+        font-family: 'Fredoka', cursive;
+        font-size: 2.8rem;
+        color: var(--dark-navy);
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+    .membership-description-modern {
+        font-family: 'Nunito', sans-serif;
+        color: var(--medium-gray);
+        font-size: 1.2rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        font-weight: 500;
+    }
+
+    .membership-benefits-modern {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 3rem;
+        font-family: 'Nunito', sans-serif;
+        color: var(--dark-navy);
+    }
+
+    .membership-benefits-modern li {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        background: var(--white);
+        border-radius: var(--border-radius);
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .membership-benefits-modern li:hover {
+        transform: translateX(10px);
+        box-shadow: var(--shadow);
+    }
+
+    .membership-benefits-modern li i {
+        color: #2ecc71;
+        margin-right: 15px;
+        font-size: 1.5rem;
+    }
+
+    .membership-btn-special {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 20px 50px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.3rem;
+        font-weight: 800;
+        border-radius: 50px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        box-shadow: var(--shadow);
+        display: inline-flex;
+        align-items: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .membership-btn-special:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* Birthday Section - Clean White Design */
+    .birthday-section-modern {
+        background: var(--light-gray);
+        color: var(--dark-navy);
+        padding: 100px 0;
+        text-align: center;
+        position: relative;
+    }
+
+    .birthday-content-modern {
+        position: relative;
+        z-index: 2;
+    }
+
+    .birthday-section-modern .section-title-modern {
+        color: var(--dark-navy);
+        font-size: 3.2rem;
+        margin-bottom: 3rem;
+        position: relative;
+    }
+
+    .birthday-card-container {
+        background: var(--white);
+        border-radius: 30px;
+        padding: 3rem;
+        margin-top: 50px;
+        box-shadow: var(--shadow);
+        transition: all 0.5s ease;
+        border: 3px solid transparent;
+    }
+
+    .birthday-card-container:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--bright-pink);
+    }
+
+    .birthday-image-modern {
+        max-width: 100%;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 2.5rem;
+        animation: float-gentle 6s ease-in-out infinite;
+    }
+
+    .birthday-description {
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.3rem;
+        line-height: 1.7;
+        margin-bottom: 2.5rem;
+        font-weight: 500;
+        color: var(--medium-gray);
+    }
+
+    .birthday-btn-special {
+        background: var(--gradient-primary);
+        border: none;
+        padding: 22px 55px;
+        font-family: 'Nunito', sans-serif;
+        font-size: 1.4rem;
+        font-weight: 800;
+        border-radius: 50px;
+        color: white;
+        text-decoration: none;
+        transition: all 0.4s ease;
+        box-shadow: var(--shadow);
+        display: inline-flex;
+        align-items: center;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+
+    .birthday-btn-special:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: var(--shadow-hover);
+    }
+
+    /* Testimonial Section - Light Gray */
+    .testimonial-section-modern {
+        padding: 100px 0;
+        background: var(--white);
+        position: relative;
+    }
+
+    .testimonial-card-modern {
+        background: var(--light-gray);
+        border-radius: var(--border-radius);
+        padding: 2.5rem;
+        box-shadow: var(--shadow);
+        transition: all 0.4s ease;
+        position: relative;
+        border: 2px solid transparent;
+    }
+
+    .testimonial-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--bright-blue);
+    }
+
+    .testimonial-text-modern {
+        font-family: 'Nunito', sans-serif;
+        font-style: italic;
+        color: var(--medium-gray);
+        font-size: 1.2rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        font-weight: 500;
+    }
+
+    .testimonial-author-modern {
+        font-family: 'Fredoka', cursive;
+        font-weight: 600;
+        color: var(--dark-navy);
+        font-size: 1.2rem;
+    }
+
+    /* Blog Section - White Background */
+    .blog-section {
+        padding: 100px 0;
+        background: var(--light-gray);
+    }
+
+    .blog-card-modern {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: all 0.4s ease;
+        border: 2px solid transparent;
+    }
+
+    .blog-card-modern:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-hover);
+        border-color: var(--bright-yellow);
+    }
+
+    .blog-image-modern {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: all 0.4s ease;
+    }
+
+    .blog-card-modern:hover .blog-image-modern {
+        transform: scale(1.1);
+    }
+
+    /* Section Titles */
+    .section-title-modern {
+        font-family: 'Fredoka', cursive;
+        font-size: 3.2rem;
+        color: var(--dark-navy);
+        text-align: center;
+        margin-bottom: 4rem;
+        position: relative;
+        font-weight: 700;
+    }
+
+    .section-title-modern::after {
+        content: '';
+        position: absolute;
+        bottom: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 6px;
+        background: var(--gradient-primary);
+        border-radius: 10px;
+    }
+
+    /* Enhanced Animations */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes bounceIn {
+        0% { opacity: 0; transform: scale(0.3) translateY(-50px); }
+        50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
+        70% { transform: scale(0.9) translateY(0); }
+        100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes float-gentle {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+
+    @keyframes countUp {
+        from { transform: scale(0) rotate(-180deg); opacity: 0; }
+        to { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-title-modern {
+            font-size: 2.8rem;
+        }
+
+        .hero-subtitle-modern {
+            font-size: 1.1rem;
+        }
+
+        .section-title-modern {
+            font-size: 2.5rem;
+        }
+
+        .membership-title-modern {
+            font-size: 2.2rem;
+        }
+
+        .birthday-section-modern .section-title-modern {
+            font-size: 2.5rem;
+        }
+
+        .hero-section-modern {
+            padding: 80px 0;
+            min-height: 80vh;
+        }
+
+        .btn-hero-modern, .membership-btn-special, .birthday-btn-special {
+            padding: 15px 35px;
+            font-size: 1.1rem;
+        }
+
+        .stat-number-modern {
+            font-size: 3rem;
+        }
+
+        .membership-card-modern, .birthday-card-container {
+            padding: 2rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .hero-title-modern {
+            font-size: 2.2rem;
+        }
+
+        .section-title-modern {
+            font-size: 2rem;
+        }
+
+        .membership-title-modern {
+            font-size: 1.8rem;
+        }
+
+        .birthday-section-modern .section-title-modern {
+            font-size: 2rem;
+        }
+
+        .hero-image-modern {
+            margin-top:108px;
+            max-height: 330px;
+        }
+
+        .membership-benefits-modern li {
+            font-size: 1rem;
+        }
+
+        .birthday-description {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section-modern">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-content-modern">
+                <h1 class="hero-title-modern">Alisa Club-a Xoş Gəlmisiniz!</h1>
+                <p class="hero-subtitle-modern">Uşaqlarınızın inkişafı üçün ən yaxşı məkan. Yaradıcılıq, təhsil və əyləncə bir yerdə!</p>
+                <a href="{% url 'core:about' %}" class="btn-hero-modern">
+                 Haqqımızda
+                </a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'core/image/fas.png' %}" alt="Uşaqlar üçün tədbir afiçası" class="hero-image-modern">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Upcoming Events Carousel -->
+<section class="events-section">
+    <div class="container">
+        <h2 class="section-title-modern">Yaxınlaşan Tədbirlər</h2>
+        <div id="eventCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% include 'events/event_list_preview.html' %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#eventCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#eventCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section-modern">
+    <div class="container">
+        <h2 class="section-title-modern">Xidmətlərimiz</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <h4 class="service-title-modern">Maraqlı Tədbirlər</h4>
+                    <p class="service-description-modern">Uşaqlarınız üçün yaş qrupuna uyğun, maraqlı və təhsil verici tədbirlər təşkil edirik.</p>
+                    <a href="{% url 'events:event_list' %}" class="btn-hero-modern">Tədbirləri Gör</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-book-open-reader"></i>
+                    </div>
+                    <h4 class="service-title-modern">Təhsil Materialları</h4>
+                    <p class="service-description-modern">Yaş qrupuna uyğun oyun ideyaları, rəngləmə səhifələri və inkişaf edici tapşırıqlar.</p>
+                    <a href="{% url 'kids_content:material_list' %}" class="btn-hero-modern">Materialları Kəşf Et</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card-modern">
+                    <div class="service-icon-modern">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h4 class="service-title-modern">Medal Sistemi</h4>
+                    <p class="service-description-modern">Virtual pasport və medal sistemi ilə uşağınızın nailiyyətlərini qeyd edin.</p>
+                    <a href="{% url 'medals:medal_list' %}" class="btn-hero-modern">Medalları Gör</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section-modern">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item-modern">
+                    <span class="stat-number-modern" data-count="500">0</span>
+                    <div class="stat-label-modern">Xoşbəxt Uşaq</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item-modern">
+                    <span class="stat-number-modern" data-count="50">0</span>
+                    <div class="stat-label-modern">Tədbir</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item-modern">
+                    <span class="stat-number-modern" data-count="200">0</span>
+                    <div class="stat-label-modern">Ailə</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item-modern">
+                    <span class="stat-number-modern" data-count="5">0</span>
+                    <div class="stat-label-modern">İl Təcrübə</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Membership Section with Image -->
+<section class="membership-section-modern">
+    <div class="container">
+        <h2 class="section-title-modern">Alisa Club Üzvlüyü</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="membership-card-modern">
+                    <h3 class="membership-title-modern">Ailəmizə Qoşulun!</h3>
+                    <p class="membership-description-modern">Alisa Club üzvlüyü ilə uşağınızın inkişafına dəstək olun. Eksklüziv tədbirlər və təhsil materialları sizi gözləyir!</p>
+                    <ul class="membership-benefits-modern">
+                        <li><i class="fas fa-check-circle"></i>Özəl tədbirlərə giriş</li>
+                        <li><i class="fas fa-check-circle"></i>Pulsuz təhsil materialları</li>
+                        <li><i class="fas fa-check-circle"></i>Medal və mükafat sistemi</li>
+                    </ul>
+                    <a href="{% url 'membership:membership' %}" class="membership-btn-special">
+                        <i class="fas fa-user-plus me-2"></i>İndi Üzv Ol!
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'core/image/faq.png' %}" alt="Üzvlük" class="membership-image-modern">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial Section -->
+<section class="testimonial-section-modern">
+    <div class="container">
+        <h2 class="section-title-modern">Validəynlərin Rəyləri</h2>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern">
+                    <p class="testimonial-text-modern">Uşağımın inkişafında böyük rol oynadı. Həm əyləncə, həm də təhsil var!</p>
+                    <div class="testimonial-author-modern">Ayşə Həsənova</div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern">
+                    <p class="testimonial-text-modern">Tədbirlər çox peşəkar təşkil olunur. Uşağım hər dəfə həvəslə gəlir!</p>
+                    <div class="testimonial-author-modern">Rəşad Məmmədov</div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="testimonial-card-modern">
+                    <p class="testimonial-text-modern">Medal sistemi uşağımı həvəsləndirdi. Çox yaradıcı yanaşma!</p>
+                    <div class="testimonial-author-modern">Gülnar Əliyeva</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Birthday Planner Section with Image -->
+<section class="birthday-section-modern">
+    <div class="container">
+        <h2 class="section-title-modern">Unudulmaz Doğum Günü Təşkil Edin!</h2>
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center">
+                <div class="birthday-card-container">
+                    <img src="{% static 'core/image/birthday.webp' %}" alt="Doğum günü təşkili" class="birthday-image-modern">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="birthday-card-container">
+                    <p class="birthday-description">Uşağınızın doğum günü Alisa Club ilə möcüzəli olacaq. Planlamanı bizə həvalə edin və ən gözəl anıları yaradın!</p>
+                    <a href="{% url 'birthday:planner' %}" class="birthday-btn-special">
+                        <i class="fas fa-birthday-cake me-2"></i>İndi Planlaşdır!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Section -->
+<section class="blog-section">
+    <div class="container">
+        <h2 class="section-title-modern">Son Blog Yazıları</h2>
+        <div class="row g-4">
+            {% for post in latest_posts|slice:":3" %}
+            <div class="col-lg-4 col-md-6">
+                <div class="blog-card-modern">
+                    <img src="{{ post.featured_image.url|default:'/static/images/default-blog.jpg' }}" alt="{{ post.title }}" class="blog-image-modern">
+                    <div class="p-3">
+                        <h4 class="service-title-modern">{{ post.title }}</h4>
+                        <p class="text-muted">{{ post.summary|truncatewords:20 }}</p>
+                        <a href="{% url 'blog:post_detail' post.slug %}" class="btn-hero-modern">
+                            <i class="fas fa-arrow-right me-2"></i>Davamını Oxu
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">Hələ blog yazısı yoxdur. Tezliklə əlavə olunacaq!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Counter animation
+    function animateCounter(element) {
+        const target = parseInt(element.getAttribute('data-count'));
+        const increment = target / 80;
+        let current = 0;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target + '+';
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.ceil(current);
+            }
+        }, 25);
+    }
+
+    // Intersection Observer for counter animation
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target.classList.contains('stat-number-modern')) {
+                animateCounter(entry.target);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.stat-number-modern').forEach(el => {
+            counterObserver.observe(el);
+        });
+
+        // Carousel initialization
+        const eventCarousel = document.querySelector('#eventCarousel');
+        if (eventCarousel) {
+            new bootstrap.Carousel(eventCarousel, {
+                interval: 5000,
+                wrap: true
+            });
+        }
+
+        // Smooth scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.service-card-modern, .testimonial-card-modern, .blog-card-modern, .membership-card-modern, .birthday-card-container').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Add hover effects
+        const cards = document.querySelectorAll('.service-card-modern, .testimonial-card-modern, .blog-card-modern, .membership-card-modern, .birthday-card-container');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transition = 'all 0.3s ease';
+            });
+        });
+    });
+</script>
+{% endblock %}
