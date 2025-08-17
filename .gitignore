@@ -1,0 +1,37 @@
+# =========================
+# Python / Django / alisa_club
+# =========================
+
+# Python cache faylları
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Django migrations (opsional, əgər repoda saxlamaq istəmirsənsə)
+*/migrations/*.pyc
+*/migrations/*.py~
+*/migrations/__pycache__/
+
+# Database faylları
+*.sqlite3
+db.sqlite3
+
+# Django secret və env faylları
+.env
+*.env
+
+# Log faylları
+*.log
+
+# Static files (production üçün təmizlənmiş fayllar)
+staticfiles/
+
+# Media files (istifadəçilərin upload etdiyi fayllar)
+media/

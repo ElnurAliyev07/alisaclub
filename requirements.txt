@@ -1,0 +1,12 @@
+Django
+Pillow
+django-crispy-forms
+crispy-bootstrap5
+python-decouple
+celery
+redis
+django-jazzmin
+python-dotenv
+django-widget-tweaks
+
+gunicorn
