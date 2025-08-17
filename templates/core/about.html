@@ -27,8 +27,8 @@
             </div>
             <div class="col-lg-6 text-center">
                 <div class="hero-image-container">
-                    <img src="/placeholder.svg?height=500&width=600&text=Alisa+Club" 
-                         alt="Alisa Club" class="img-fluid rounded-4 shadow-lg animate-float">
+                    <img src="{% static 'core/image/about.png' %}" height="200" width="200"
+                    alt="Alisa Club" class="img-fluid rounded-4 animate-float">
                 </div>
             </div>
         </div>
@@ -49,8 +49,8 @@
         <div class="row align-items-center">
             <div class="col-lg-6 order-lg-2">
                 <div class="mission-image-wrapper position-relative">
-                    <img src="/placeholder.svg?height=400&width=500&text=Mission" 
-                         alt="Bizim Missiyamız" class="img-fluid rounded-4 shadow">
+                    <img src="{% static 'core/image/miss.png' %}" height="400" width="500"
+                         alt="Bizim Missiyamız" class="img-fluid rounded-4">
                     <div class="image-overlay rounded-4">
                         <div class="overlay-content text-white text-center">
                             <i class="fas fa-heart fa-3x mb-3"></i>
@@ -335,10 +335,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.mission-image-wrapper:hover .image-overlay {
-    opacity: 1;
 }
 
 .point-icon {
