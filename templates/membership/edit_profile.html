@@ -1,183 +1,819 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block title %}Profil Redaktə Et - Alisa Club{% endblock %}
 
+{% block extra_css %}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bike-orange: #ff8c42;
+        --bike-yellow: #f1c40f;
+        --bike-red: #e74c3c;
+        --dark-navy: #2c3e50;
+        --light-gray: #f8f9fa;
+        --gradient-primary: linear-gradient(135deg, #ff8c42 0%, #f1c40f 50%, #e74c3c 100%);
+        --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        --gradient-info: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        --shadow-soft: 0 8px 32px rgba(0,0,0,0.1);
+        --shadow-hover: 0 15px 40px rgba(0,0,0,0.15);
+        --border-radius: 15px;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    /* Main Container */
+    .edit-profile-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #fef9e7 0%, #eef7ff 100%);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 0;
+        overflow: hidden;
+    }
+
+    .edit-profile-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ff8c42' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpath d='M30 0v60M0 30h60'/%3E%3C/g%3E%3C/svg%3E");
+        animation: slide-pattern 25s linear infinite;
+        z-index: 1;
+    }
+
+    @keyframes slide-pattern {
+        0% { background-position: 0 0; }
+        100% { background-position: 60px 60px; }
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Floating Decorations */
+    .floating-decor {
+        position: absolute;
+        font-size: 2rem;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .floating-decor:nth-child(1) {
+        top: 12%;
+        left: 6%;
+        color: var(--bike-orange);
+        animation: float-bounce 6s ease-in-out infinite;
+    }
+
+    .floating-decor:nth-child(2) {
+        top: 25%;
+        right: 8%;
+        color: var(--bike-yellow);
+        animation: float-swing 8s ease-in-out infinite 3s;
+    }
+
+    .floating-decor:nth-child(3) {
+        bottom: 35%;
+        left: 10%;
+        color: var(--bike-red);
+        animation: float-rotate 7s ease-in-out infinite 6s;
+    }
+
+    .floating-decor:nth-child(4) {
+        bottom: 20%;
+        right: 12%;
+        color: var(--bike-orange);
+        animation: float-pulse 5s ease-in-out infinite 9s;
+    }
+
+    .floating-decor:nth-child(5) {
+        top: 65%;
+        right: 5%;
+        color: var(--bike-yellow);
+        animation: float-bounce 6s ease-in-out infinite 1.5s;
+    }
+
+    @keyframes float-bounce {
+        0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+        50% { transform: translateY(-20px) rotate(180deg) scale(1.1); }
+    }
+
+    @keyframes float-swing {
+        0%, 100% { transform: rotate(-10deg) translateX(0px) scale(1); }
+        50% { transform: rotate(10deg) translateX(15px) scale(1.05); }
+    }
+
+    @keyframes float-rotate {
+        0%, 100% { transform: rotate(0deg) translateY(0px); }
+        25% { transform: rotate(90deg) translateY(-10px); }
+        50% { transform: rotate(180deg) translateY(0px); }
+        75% { transform: rotate(270deg) translateY(10px); }
+    }
+
+    @keyframes float-pulse {
+        0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+        50% { transform: scale(1.15) rotate(180deg); opacity: 0.8; }
+    }
+
+    /* Form Container */
+    .form-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 3rem;
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        max-width: 900px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .form-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: var(--gradient-primary);
+        z-index: 1;
+    }
+
+    /* Header */
+    .form-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .form-title {
+        font-family: 'Fredoka', cursive;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--dark-navy);
+        margin-bottom: 0.5rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .form-subtitle {
+        color: var(--dark-navy);
+        font-size: 1.1rem;
+        opacity: 0.8;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    /* Form Sections */
+    .form-section {
+        background: linear-gradient(135deg, rgba(255, 140, 66, 0.1), rgba(241, 196, 15, 0.1));
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        margin-top: 17px;
+        transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .form-section h5 {
+        font-family: 'Fredoka', cursive;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--dark-navy);
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-section .divider {
+        height: 2px;
+        background: var(--gradient-primary);
+        width: 80px;
+        border-radius: 2px;
+        margin-bottom: 1rem;
+    }
+
+    /* Form Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .form-grid-full {
+        grid-column: 1 / -1;
+    }
+
+    /* Form Groups */
+    .form-group {
+        position: relative;
+        animation: fadeInUp 0.6s ease-out both;
+    }
+
+    .form-group:nth-child(1) { animation-delay: 0.1s; }
+    .form-group:nth-child(2) { animation-delay: 0.2s; }
+    .form-group:nth-child(3) { animation-delay: 0.3s; }
+    .form-group:nth-child(4) { animation-delay: 0.4s; }
+    .form-group:nth-child(5) { animation-delay: 0.5s; }
+    .form-group:nth-child(6) { animation-delay: 0.6s; }
+
+    .form-label {
+        font-family: 'Fredoka', cursive;
+        font-weight: 500;
+        color: var(--dark-navy);
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .form-label i {
+        color: var(--bike-orange);
+        width: 16px;
+        text-align: center;
+    }
+
+    /* Form Controls */
+    .form-control-modern, .form-select-modern {
+        width: 100%;
+        padding: 1rem 1.2rem;
+        border: 2px solid transparent;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(248, 249, 250, 0.8);
+        backdrop-filter: blur(10px);
+        font-family: 'Inter', sans-serif;
+        position: relative;
+    }
+
+    .form-control-modern:focus, .form-select-modern:focus {
+        outline: none;
+        border-color: var(--bike-orange);
+        background: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 140, 66, 0.2);
+    }
+
+    .form-control-modern::placeholder, .form-select-modern::placeholder {
+        color: #adb5bd;
+        font-style: italic;
+    }
+
+    .form-control-modern:valid, .form-select-modern:valid {
+        border-color: #10b981;
+    }
+
+    .form-control-modern:invalid:not(:placeholder-shown), .form-select-modern:invalid:not(:placeholder-shown) {
+        border-color: var(--bike-red);
+    }
+
+    .form-control-modern.success, .form-select-modern.success {
+        border-color: #10b981;
+        background: rgba(16, 185, 129, 0.05);
+    }
+
+    .form-control-modern.error, .form-select-modern.error {
+        border-color: var(--bike-red);
+        background: rgba(239, 68, 68, 0.05);
+    }
+
+    /* Info Text */
+    .info-text {
+        color: #6b7280;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+        width: 100%;
+        background: var(--gradient-success);
+        border: none;
+        color: white;
+        padding: 1.2rem 2rem;
+        margin-top:15px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .submit-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .submit-btn:hover::before {
+        left: 100%;
+    }
+
+    .submit-btn:active {
+        transform: translateY(-1px);
+    }
+
+    /* Back Button */
+    .back-btn {
+        width: 100%;
+        background: var(--gradient-info);
+        border: none;
+        color: white;
+        padding: 1.2rem 2rem;
+        margin-top: 15px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .back-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .back-btn:hover {
+        background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-hover);
+    }
+
+    .back-btn:hover::before {
+        left: 100%;
+    }
+
+    .back-btn:active {
+        transform: translateY(-1px);
+    }
+
+    /* Loading State */
+    .submit-btn.loading, .back-btn.loading {
+        color: transparent;
+    }
+
+    .loading-spinner {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 25px;
+        height: 25px;
+        border: 3px solid rgba(255,255,255,0.3);
+        border-top: 3px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .submit-btn.loading .loading-spinner, .back-btn.loading .loading-spinner {
+        display: block;
+    }
+
+    @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Error Messages */
+    .errorlist {
+        color: var(--bike-red);
+        list-style: none;
+        margin: 0.5rem 0;
+        font-size: 0.9rem;
+    }
+
+    .errorlist li {
+        padding: 0.25rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .errorlist li::before {
+        content: '⚠️';
+        font-size: 0.8rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .container {
+            padding: 0 1.5rem;
+        }
+
+        .form-container {
+            padding: 2.5rem;
+        }
+
+        .form-title {
+            font-size: 2.2rem;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .edit-profile-section {
+            padding: 1rem 0;
+        }
+
+        .container {
+            padding: 0 1rem;
+        }
+
+        .form-container {
+            padding: 2rem;
+            border-radius: 20px;
+        }
+
+        .form-title {
+            font-size: 2rem;
+        }
+
+        .form-subtitle {
+            font-size: 1rem;
+        }
+
+        .floating-decor {
+            font-size: 1.5rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 1.5rem;
+            margin: 0.5rem;
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+        }
+
+        .form-control-modern, .form-select-modern {
+            padding: 0.8rem;
+            font-size: 0.9rem;
+        }
+
+        .submit-btn, .back-btn {
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .floating-decor {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Dark Mode Support */
+    @media (prefers-color-scheme: dark) {
+        .form-container {
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+        }
+
+        .form-title {
+            color: white;
+        }
+
+        .form-subtitle,
+        .form-section h5,
+        .form-label {
+            color: #e2e8f0;
+        }
+
+        .form-control-modern, .form-select-modern {
+            background: rgba(60, 60, 60, 0.8);
+            color: white;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .form-control-modern:focus, .form-select-modern:focus {
+            background: rgba(70, 70, 70, 0.9);
+        }
+
+        .form-control-modern::placeholder, .form-select-modern::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, rgba(255, 140, 66, 0.2), rgba(241, 196, 15, 0.2));
+        }
+
+        .info-text {
+            color: #94a3b8;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-pink-100 via-pink-50 to-rose-100 flex items-center justify-center py-6">
-    <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto">
-            <!-- Başlıq hissəsi -->
-            <div class="text-center mb-6">
-                <h2 class="text-3xl md:text-4xl font-bold text-rose-700 drop-shadow-md">
-                    <i class="fas fa-user-cog text-yellow-400 mr-2"></i>
+<div class="edit-profile-section">
+    <!-- Floating Decorations -->
+    <div class="floating-decor">🎯</div>
+    <div class="floating-decor">🏆</div>
+    <div class="floating-decor">📋</div>
+    <div class="floating-decor">✨</div>
+    <div class="floating-decor">🔧</div>
+
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <h2 class="form-title">
+                    <i class="fas fa-user-cog"></i>
                     Profil Tənzimləmələri
-                    <i class="fas fa-tools text-yellow-400 ml-2"></i>
+                    <i class="fas fa-tools"></i>
                 </h2>
-                <p class="text-rose-500 mt-2 text-sm md:text-base">Məlumatlarınızı yeniləyin və profili fərdiləşdirin ⚙️</p>
+                <p class="form-subtitle">Məlumatlarınızı yeniləyin və profili fərdiləşdirin ⚙️</p>
             </div>
 
-            <div class="bg-white bg-opacity-90 backdrop-blur-lg rounded-2xl shadow-xl">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-green-400 to-teal-400 rounded-t-2xl p-4 text-center">
-                    <div class="flex justify-center items-center gap-3">
-                        <div class="bg-white bg-opacity-20 backdrop-blur-md rounded-full p-2">
-                            <i class="fas fa-user-edit text-white text-xl"></i>
+            <!-- Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data" id="editProfileForm">
+                {% csrf_token %}
+                
+                <!-- Şəxsi Məlumatlar -->
+                <div class="form-section">
+                    <h5>
+                        <i class="fas fa-user-circle"></i>
+                        Şəxsi Məlumatlar
+                    </h5>
+                    <div class="divider"></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-user"></i>
+                                Ad
+                            </label>
+                            {{ user_form.first_name|add_class:"form-control-modern"|attr:"placeholder:Ad daxil edin" }}
+                            {{ user_form.first_name.errors }}
                         </div>
-                        <div>
-                            <h4 class="text-white font-bold text-lg">Profil Məlumatlarını Yenilə</h4>
-                            <p class="text-white text-opacity-75 text-sm">Şəxsi məlumatlarınızı idarə edin</p>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-signature"></i>
+                                Soyad
+                            </label>
+                            {{ user_form.last_name|add_class:"form-control-modern"|attr:"placeholder:Soyad daxil edin" }}
+                            {{ user_form.last_name.errors }}
+                        </div>
+                        <div class="form-group form-grid-full">
+                            <label class="form-label">
+                                <i class="fas fa-envelope"></i>
+                                Email ünvanı
+                            </label>
+                            {{ user_form.email|add_class:"form-control-modern"|attr:"placeholder:Email daxil edin" }}
+                            {{ user_form.email.errors }}
                         </div>
                     </div>
                 </div>
 
-                <div class="p-6">
-                    <form method="POST" enctype="multipart/form-data" class="space-y-6 needs-validation" novalidate>
-                        {% csrf_token %}
-                        
-                        <!-- Şəxsi məlumatlar bölümü -->
-                        <div class="bg-white bg-opacity-10 rounded-xl p-4 hover:shadow-lg transition-all duration-300">
-                            <h5 class="text-rose-700 font-bold text-lg mb-3">
-                                <i class="fas fa-user-circle mr-2"></i>Şəxsi Məlumatlar
-                            </h5>
-                            <div class="h-0.5 bg-gradient-to-r from-rose-400 to-transparent rounded mb-4 w-20"></div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="form-floating">
-                                    {{ user_form.first_name }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-user mr-2"></i>Ad
-                                    </label>
-                                </div>
-                                <div class="form-floating">
-                                    {{ user_form.last_name }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-signature mr-2"></i>Soyad
-                                    </label>
-                                </div>
-                                <div class="form-floating md:col-span-2">
-                                    {{ user_form.email }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-envelope mr-2"></i>Email ünvanı
-                                    </label>
-                                </div>
-                            </div>
+                <!-- Əlaqə Məlumatları -->
+                <div class="form-section">
+                    <h5>
+                        <i class="fas fa-phone"></i>
+                        Əlaqə Məlumatları
+                    </h5>
+                    <div class="divider"></div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-mobile-alt"></i>
+                                Əsas telefon
+                            </label>
+                            {{ profile_form.phone|add_class:"form-control-modern"|attr:"placeholder:Telefon nömrəsi daxil edin" }}
+                            {{ profile_form.phone.errors }}
                         </div>
-
-                        <!-- Əlaqə məlumatları bölümü -->
-                        <div class="bg-white bg-opacity-10 rounded-xl p-4 hover:shadow-lg transition-all duration-300">
-                            <h5 class="text-rose-700 font-bold text-lg mb-3">
-                                <i class="fas fa-phone mr-2"></i>Əlaqə Məlumatları
-                            </h5>
-                            <div class="h-0.5 bg-gradient-to-r from-yellow-300 to-transparent rounded mb-4 w-20"></div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div class="form-floating">
-                                    {{ profile_form.phone }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-mobile-alt mr-2"></i>Əsas telefon
-                                    </label>
-                                </div>
-                                <div class="form-floating">
-                                    {{ profile_form.emergency_phone }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-exclamation-triangle mr-2"></i>Təcili əlaqə telefonu
-                                    </label>
-                                </div>
-                                <div class="form-floating md:col-span-2">
-                                    {{ profile_form.address }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-map-marker-alt mr-2"></i>Ev ünvanı
-                                    </label>
-                                </div>
-                                <div class="form-floating md:col-span-2">
-                                    {{ profile_form.emergency_contact }}
-                                    <label class="text-rose-600 font-semibold">
-                                        <i class="fas fa-user-friends mr-2"></i>Təcili halda əlaqə şəxsi
-                                    </label>
-                                    <p class="text-gray-500 text-xs mt-2">
-                                        <i class="fas fa-info-circle mr-1"></i>
-                                        Təcili hallarda bizim əlaqə saxlaya biləcəyimiz şəxs (ad, soyad, əlaqə)
-                                    </p>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Təcili əlaqə telefonu
+                            </label>
+                            {{ profile_form.emergency_phone|add_class:"form-control-modern"|attr:"placeholder:Təcili telefon nömrəsi daxil edin" }}
+                            {{ profile_form.emergency_phone.errors }}
                         </div>
-
-                        <!-- Düymələr -->
-                        <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                            <button type="submit" 
-                                    class="bg-gradient-to-r from-green-400 to-teal-400 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <i class="fas fa-check-circle mr-2"></i>Məlumatları Yadda Saxla
-                            </button>
-                            <a href="{% url 'membership:profile' %}" 
-                               class="bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <i class="fas fa-arrow-left mr-2"></i>Geriyə Qayıt
-                            </a>
+                        <div class="form-group form-grid-full">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Ev ünvanı
+                            </label>
+                            {{ profile_form.address|add_class:"form-control-modern"|attr:"placeholder:Ünvan daxil edin" }}
+                            {{ profile_form.address.errors }}
                         </div>
-                    </form>
+                        <div class="form-group form-grid-full">
+                            <label class="form-label">
+                                <i class="fas fa-user-friends"></i>
+                                Təcili halda əlaqə şəxsi
+                            </label>
+                            {{ profile_form.emergency_contact|add_class:"form-control-modern"|attr:"placeholder:Təcili halda əlaqə şəxsi (ad, soyad, əlaqə)" }}
+                            {{ profile_form.emergency_contact.errors }}
+                            <p class="info-text">
+                                <i class="fas fa-info-circle"></i>
+                                Təcili hallarda bizim əlaqə saxlaya biləcəyimiz şəxs (ad, soyad, əlaqə)
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Dekorativ animasiyalı elementlər -->
-            <div class="fixed inset-0 pointer-events-none z-10">
-                <div class="absolute text-2xl opacity-50 animate-float" style="top: 12%; left: 6%;">🎯</div>
-                <div class="absolute text-2xl opacity-50 animate-float" style="top: 25%; right: 8%; animation-delay: -3s;">🏆</div>
-                <div class="absolute text-2xl opacity-50 animate-float" style="bottom: 35%; left: 10%; animation-delay: -6s;">📋</div>
-                <div class="absolute text-2xl opacity-50 animate-float" style="bottom: 20%; right: 12%; animation-delay: -9s;">✨</div>
-                <div class="absolute text-2xl opacity-50 animate-float" style="top: 65%; right: 5%; animation-delay: -1.5s;">🔧</div>
-            </div>
+                <!-- Düymələr -->
+                <div class="form-grid">
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-check-circle"></i>
+                        Məlumatları Yadda Saxla
+                        <div class="loading-spinner"></div>
+                    </button>
+                    <a href="{% url 'membership:profile' %}" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        Geriyə Qayıt
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+{% endblock %}
 
-<style>
-    @keyframes float {
-        0%, 100% { transform: translateY(0) rotate(0deg); }
-        25% { transform: translateY(-10px) rotate(5deg); }
-        50% { transform: translateY(0) rotate(10deg); }
-        75% { transform: translateY(10px) rotate(5deg); }
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('editProfileForm');
+    const submitBtn = form.querySelector('.submit-btn');
+    const backBtn = form.querySelector('.back-btn');
+
+    // Form submission handling
+    form.addEventListener('submit', function(e) {
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+        }, 5000);
+    });
+
+    // Enhanced input interactions
+    const inputs = form.querySelectorAll('input, select, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'translateY(-5px)';
+            this.parentElement.style.transition = 'transform 0.3s ease';
+            this.classList.remove('error');
+        });
+
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = '';
+        });
+
+        input.addEventListener('input', function() {
+            if (this.checkValidity() && this.value) {
+                this.classList.remove('error');
+                this.classList.add('success');
+            } else if (this.value && !this.checkValidity()) {
+                this.classList.add('error');
+                this.classList.remove('success');
+            } else {
+                this.classList.remove('error', 'success');
+            }
+        });
+    });
+
+    // Handle Django form errors styling
+    const errorFields = form.querySelectorAll('.errorlist');
+    errorFields.forEach(errorList => {
+        const field = errorList.previousElementSibling;
+        if (field && (field.tagName === 'INPUT' || field.tagName === 'SELECT' || field.tagName === 'TEXTAREA')) {
+            field.classList.add('error');
+        }
+    });
+
+    // Touch interactions for mobile
+    if ('ontouchstart' in window) {
+        [submitBtn, backBtn].forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                if (!this.disabled) {
+                    this.style.transform = 'translateY(-1px) scale(0.98)';
+                }
+            });
+
+            btn.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    if (!this.classList.contains('loading')) {
+                        this.style.transform = '';
+                    }
+                }, 150);
+            });
+        });
     }
 
-    .animate-float {
-        animation: float 10s ease-in-out infinite;
-    }
+    // Add sparkle effect to floating decorations
+    const decorElements = document.querySelectorAll('.floating-decor');
+    setInterval(() => {
+        decorElements.forEach(el => {
+            if (Math.random() > 0.8) {
+                el.style.filter = 'brightness(1.3) drop-shadow(0 0 8px rgba(255,140,66,0.6))';
+                setTimeout(() => {
+                    el.style.filter = '';
+                }, 800);
+            }
+        });
+    }, 3000);
 
-    .form-control, .form-select {
-        border-radius: 0.75rem;
-        border: 2px solid #e5e7eb;
-        padding: 0.75rem;
-        transition: all 0.3s ease;
-        background: rgba(255, 255, 255, 0.9);
-    }
+    // Smooth form section animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    });
 
-    .form-control:focus, .form-select:focus {
-        border-color: #10b981;
-        box-shadow: 0 0 0 0.2rem rgba(16, 185, 129, 0.25);
-        background: white;
-    }
-
-    .form-floating > label {
-        transition: all 0.3s ease;
-    }
-
-    .form-floating > .form-control:focus ~ label,
-    .form-floating > .form-control:not(:placeholder-shown) ~ label {
-        color: #10b981;
-    }
-
-    .form-control:valid { border-color: #10b981; }
-    .form-control:invalid { border-color: #ef4444; }
-
-    @media (max-width: 768px) {
-        .text-4xl { font-size: 2rem; }
-        .text-2xl { font-size: 1.5rem; }
-        .container { padding-left: 1rem; padding-right: 1rem; }
-    }
-
-    @media (max-width: 576px) {
-        .text-4xl { font-size: 1.5rem; }
-        .text-2xl { font-size: 1.2rem; }
-        .container { padding-left: 0.5rem; padding-right: 0.5rem; }
-    }
-</style>
-
-<script src="https://cdn.tailwindcss.com"></script>
+    document.querySelectorAll('.form-section, .form-group').forEach((element, index) => {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        element.style.transition = `opacity 0.5s ease ${index * 0.05}s, transform 0.5s ease ${index * 0.05}s`;
+        observer.observe(element);
+    });
+});
+</script>
 {% endblock %}
